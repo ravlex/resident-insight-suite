@@ -64,6 +64,9 @@ function RequestsPage() {
 
   const selectedRequest = mockRequests.find(r => r.id === selectedId) || mockRequests[0];
 
+  if (!selectedRequest) return null;
+
+
   const generateAiReply = () => {
     setIsGenerating(true);
     setTimeout(() => {
