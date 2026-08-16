@@ -89,9 +89,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "ИВЦ ЖКХ | Личный кабинет УК" },
+      { title: "ИВЦ ЖКХ и ТЭК | Личный кабинет УК" },
       { name: "description", content: "Система управления взаиморасчетами и работы с абонентами" },
-      { property: "og:title", content: "ИВЦ ЖКХ | Личный кабинет УК" },
+      { property: "og:title", content: "ИВЦ ЖКХ и ТЭК | Личный кабинет УК" },
       { property: "og:description", content: "Личный кабинет управляющей компании и РСО" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -148,7 +148,7 @@ function RootComponent() {
         <aside className="w-64 border-r bg-card flex flex-col fixed inset-y-0 z-50">
           <div className="h-16 flex items-center px-6 border-b">
             <span className="text-xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-              ИВЦ ЖКХ
+              ИВЦ ЖКХ и ТЭК
             </span>
           </div>
           <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
