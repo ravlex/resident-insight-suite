@@ -6,7 +6,8 @@ import {
   Users, 
   ArrowUpRight,
   ChevronRight,
-  Download
+  Download,
+  AlertCircle
 } from "lucide-react";
 import { 
   BarChart, 
@@ -18,7 +19,9 @@ import {
   ResponsiveContainer,
   LineChart,
   Line,
-  Cell
+  Cell,
+  AreaChart,
+  Area
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -30,6 +33,15 @@ const collectionData = [
   { name: 'Апр', billed: 4100000, collected: 3800000 },
   { name: 'Май', billed: 4300000, collected: 4150000 },
   { name: 'Июн', billed: 4600000, collected: 4400000 },
+];
+
+const forecastData = [
+  { name: 'Июн', actual: 4400000, forecast: 4400000 },
+  { name: 'Июл', forecast: 4550000 },
+  { name: 'Авг', forecast: 4300000 },
+  { name: 'Сен', forecast: 4700000 },
+  { name: 'Окт', forecast: 5100000 },
+  { name: 'Ноя', forecast: 5400000 },
 ];
 
 const debtorSegmentation = [
@@ -171,6 +183,70 @@ function Index() {
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Прогноз поступлений (AI)</CardTitle>
+            <CardDescription>Ожидаемые сборы до конца года с учетом сезонности</CardDescription>
+          </CardHeader>
+          <CardContent className="h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={forecastData}>
+                <defs>
+                  <linearGradient id="colorForecast" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} />
+                <YAxis axisLine={false} tickLine={false} tickFormatter={(value) => `${value / 1000000}M`} />
+                <Tooltip 
+                  contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                />
+                <Area type="monotone" dataKey="forecast" name="Прогноз" stroke="#3b82f6" fillOpacity={1} fill="url(#colorForecast)" strokeDasharray="5 5" />
+                <Area type="monotone" dataKey="actual" name="Факт" stroke="#1e293b" fill="#1e293b" fillOpacity={0.1} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Анализ кассовых разрывов</CardTitle>
+            <CardDescription>Сравнение прогноза сборов с обязательными платежами РСО</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-100">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-red-500 text-white rounded-full">
+                    <AlertCircle className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-red-900">Риск дефицита в августе</p>
+                    <p className="text-xs text-red-700">Ожидаемый разрыв: 450,000 ₽</p>
+                  </div>
+                </div>
+                <Button size="sm" variant="outline" className="text-xs border-red-200 text-red-800 hover:bg-red-100">Подробнее</Button>
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span>Покрытие обязательств</span>
+                  <span className="font-semibold text-orange-600">82%</span>
+                </div>
+                <div className="w-full bg-muted rounded-full h-2">
+                  <div className="bg-orange-500 h-2 rounded-full w-[82%]"></div>
+                </div>
+                <p className="text-[10px] text-muted-foreground italic">
+                  * На основе прогноза оплат за ГВС и Электричество
+                </p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>

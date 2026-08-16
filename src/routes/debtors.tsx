@@ -5,6 +5,7 @@ import {
   Filter, 
   Download, 
   FileCheck, 
+  FileText,
   MoreHorizontal,
   Mail,
   Phone,
@@ -111,9 +112,25 @@ function DebtorsPage() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <Button variant="outline" size="icon">
-                <Filter className="h-4 w-4" />
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="gap-2">
+                    <Filter className="h-4 w-4" /> Фильтры
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <div className="p-2">
+                    <p className="text-xs font-semibold mb-2 px-2 uppercase text-muted-foreground tracking-wider">Период долга</p>
+                    <DropdownMenuItem>Более 3 месяцев</DropdownMenuItem>
+                    <DropdownMenuItem>Более 6 месяцев</DropdownMenuItem>
+                    <DropdownMenuItem>Более года</DropdownMenuItem>
+                    <div className="h-px bg-border my-2" />
+                    <p className="text-xs font-semibold mb-2 px-2 uppercase text-muted-foreground tracking-wider">Сумма</p>
+                    <DropdownMenuItem>От 10 000 ₽</DropdownMenuItem>
+                    <DropdownMenuItem>От 50 000 ₽</DropdownMenuItem>
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </CardHeader>
@@ -164,8 +181,11 @@ function DebtorsPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => alert('Формирование уведомления PDF для ' + debtor.account)}>
+                          <FileText className="mr-2 h-4 w-4" /> Сформировать уведомление (PDF)
+                        </DropdownMenuItem>
                         <DropdownMenuItem>
-                          <Mail className="mr-2 h-4 w-4" /> Отправить уведомление
+                          <Mail className="mr-2 h-4 w-4" /> Отправить на Email / в ЛК
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Phone className="mr-2 h-4 w-4" /> Позвонить (автообзвон)
