@@ -54,7 +54,7 @@ const debtorSegmentation = [
 export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
-    meta: [{ title: "Дашборд | ИВЦ ЖКХ" }],
+    meta: [{ title: "Дашборд | ИВЦ ЖКХ и ТЭК" }],
   })
 
 });
