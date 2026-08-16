@@ -122,7 +122,7 @@ function ReportsPage() {
             <CardHeader>
               <CardTitle>Параметры отчета</CardTitle>
               <CardDescription>
-                Настройте фильтры для выбранного шаблона: {reportTemplates.find(t => t.id === selectedTemplate)?.title}
+                Настройте фильтры для выбранного шаблона: {reportTemplates.find(t => t.id === selectedTemplate)?.title ?? ""}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">

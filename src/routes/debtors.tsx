@@ -5,6 +5,7 @@ import {
   Filter, 
   Download, 
   FileCheck, 
+  FileText,
   MoreHorizontal,
   Mail,
   Phone,

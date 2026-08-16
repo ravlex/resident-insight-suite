@@ -6,7 +6,8 @@ import {
   Users, 
   ArrowUpRight,
   ChevronRight,
-  Download
+  Download,
+  AlertCircle
 } from "lucide-react";
 import { 
   BarChart, 
