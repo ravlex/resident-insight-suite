@@ -98,9 +98,9 @@ function ReportsPage() {
                 <div 
                   key={template.id}
                   onClick={() => setSelectedTemplate(template.id)}
-                  className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                  className={`p-3 rounded-xl border-2 cursor-pointer transition-all ${
                     selectedTemplate === template.id 
-                      ? 'bg-[#F1F3F9] border-[#0F172A] shadow-sm ring-1 ring-[#0F172A]' 
+                      ? 'bg-[#F1F3F9] border-[#0F172A] shadow-sm' 
                       : 'bg-white border-slate-200 hover:border-slate-300'
                   }`}
                 >
