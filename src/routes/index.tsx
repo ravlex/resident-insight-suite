@@ -42,8 +42,9 @@ const debtorSegmentation = [
 export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
-    title: "Дашборд | ИВЦ ЖКХ",
+    meta: [{ title: "Дашборд | ИВЦ ЖКХ" }],
   })
+
 });
 
 function MetricCard({ title, value, subtext, trend, trendValue, icon: Icon }: any) {
