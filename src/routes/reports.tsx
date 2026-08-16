@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import * as React from "react";
 import { useState } from "react";
 import { 
   FileBarChart, 
@@ -61,7 +62,9 @@ const reportTemplates = [
 ];
 
 function ReportsPage() {
-  const [selectedTemplate, setSelectedTemplate] = useState(reportTemplates[0].id);
+  const firstTemplate = reportTemplates[0];
+  if (!firstTemplate) return null;
+  const [selectedTemplate, setSelectedTemplate] = useState(firstTemplate.id);
   const [isGenerating, setIsGenerating] = useState(false);
   const [lastReport, setLastReport] = useState<string | null>(null);
 
