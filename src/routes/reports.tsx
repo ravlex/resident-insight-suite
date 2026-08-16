@@ -98,17 +98,34 @@ function ReportsPage() {
                 <div 
                   key={template.id}
                   onClick={() => setSelectedTemplate(template.id)}
-                  className={`p-3 rounded-lg border cursor-pointer transition-all hover:border-primary/50 ${
-                    selectedTemplate === template.id ? 'bg-primary/5 border-primary ring-1 ring-primary' : 'bg-card'
+                  className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                    selectedTemplate === template.id 
+                      ? 'bg-[#F1F3F9] border-[#0F172A] shadow-sm ring-1 ring-[#0F172A]' 
+                      : 'bg-white border-slate-200 hover:border-slate-300'
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-md ${selectedTemplate === template.id ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'}`}>
-                      <template.icon className="h-4 w-4" />
+                    <div className={`p-2.5 rounded-lg flex items-center justify-center transition-colors ${
+                      selectedTemplate === template.id 
+                        ? 'bg-[#0F172A] text-white shadow-md' 
+                        : 'bg-slate-50 text-slate-500'
+                    }`}>
+                      <template.icon className="h-5 w-5" />
                     </div>
-                    <div>
-                      <p className="text-sm font-medium leading-none">{template.title}</p>
-                      <Badge variant="outline" className="mt-2 text-[10px] py-0 px-1.5 h-4">
+                    <div className="flex-1 overflow-hidden">
+                      <p className={`text-sm font-semibold truncate ${
+                        selectedTemplate === template.id ? 'text-[#0F172A]' : 'text-slate-700'
+                      }`}>
+                        {template.title}
+                      </p>
+                      <Badge 
+                        variant="secondary" 
+                        className={`mt-1.5 text-[10px] py-0 px-2 h-4.5 font-medium transition-colors ${
+                          selectedTemplate === template.id 
+                            ? 'bg-white text-slate-600 border-slate-200' 
+                            : 'bg-slate-100 text-slate-500 border-transparent'
+                        }`}
+                      >
                         {template.category}
                       </Badge>
                     </div>
