@@ -127,7 +127,7 @@ function ReportsPage() {
                       onClick={() => setSelectedTemplate(template.id)}
                       className={`p-3 rounded-xl border-2 cursor-pointer transition-all shrink-0 w-[240px] lg:w-full group ${
                         selectedTemplate === template.id 
-                          ? 'bg-[#F1F3F9] border-[#0F172A] shadow-sm' 
+                          ? 'bg-[#0F172A] border-[#0F172A] shadow-md' 
                           : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                       }`}
                     >
