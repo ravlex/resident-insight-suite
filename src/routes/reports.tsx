@@ -92,13 +92,13 @@ function ReportsPage() {
         {/* Templates Sidebar */}
         <div className="lg:col-span-1 space-y-4">
           <h3 className="font-semibold text-sm px-2">Выберите шаблон</h3>
-          <ScrollArea className="h-[calc(100vh-300px)]">
-            <div className="space-y-2 pr-4">
+          <ScrollArea className="h-auto lg:h-[calc(100vh-300px)]">
+            <div className="flex lg:flex-col gap-3 pb-4 lg:pb-0 lg:pr-4 overflow-x-auto lg:overflow-x-visible">
               {reportTemplates.map((template) => (
                 <div 
                   key={template.id}
                   onClick={() => setSelectedTemplate(template.id)}
-                  className={`p-3 rounded-xl border-2 cursor-pointer transition-all ${
+                  className={`p-3 rounded-xl border-2 cursor-pointer transition-all shrink-0 w-[240px] lg:w-full ${
                     selectedTemplate === template.id 
                       ? 'bg-[#F1F3F9] border-[#0F172A] shadow-sm' 
                       : 'bg-white border-slate-200 hover:border-slate-300'
@@ -146,7 +146,7 @@ function ReportsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Период</label>
                   <Select defaultValue="june2026">
