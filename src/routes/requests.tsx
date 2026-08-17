@@ -12,8 +12,12 @@ import {
   AlertCircle,
   ArrowRight,
   TrendingUp,
-  ChevronRight
+  ChevronRight,
+  Map as MapIcon,
+  ShieldCheck,
+  Timer
 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -39,9 +43,11 @@ const mockRequests = [
     channel: 'Чат',
     isRepeat: true,
     time: '10 мин назад',
+    deadline: '2 часа',
     messages: [
       { sender: 'resident', text: 'Здравствуйте, почему в квитанции за май стоит сумма за воду в 2 раза больше? Счетчик не менялся.' }
     ]
+
   },
   { 
     id: 'R-1038', 
@@ -53,10 +59,12 @@ const mockRequests = [
     channel: 'Госуслуги',
     isRepeat: false,
     time: '2 часа назад',
+    deadline: 'Завершено',
     messages: [
       { sender: 'resident', text: 'В квартире холодно, батареи почти не греют.' },
       { sender: 'uk', text: 'Принято, техник придет завтра до 12:00 для замера температуры.' }
     ]
+
   },
 ];
 
@@ -73,7 +81,7 @@ function RequestsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <Card className="p-4 bg-muted/50 border-none shadow-none">
           <p className="text-[10px] font-bold text-muted-foreground uppercase">Всего за месяц</p>
           <p className="text-xl font-bold mt-1">248</p>
@@ -93,7 +101,15 @@ function RequestsPage() {
           <p className="text-[10px] font-bold text-emerald-600 uppercase">Среднее время</p>
           <p className="text-xl font-bold mt-1 text-emerald-900">1.5 ч</p>
         </Card>
+        <Card className="p-4 bg-slate-900 text-white border-none shadow-none">
+          <p className="text-[10px] font-bold text-slate-400 uppercase">География проблем</p>
+          <div className="flex items-center gap-2 mt-1">
+            <MapIcon className="h-4 w-4 text-primary" />
+            <span className="text-sm font-bold">Район: Центральный</span>
+          </div>
+        </Card>
       </div>
+
 
       <div className="flex flex-col lg:flex-row h-[calc(100vh-320px)] gap-6 overflow-hidden">
         <div className={cn(
@@ -129,8 +145,14 @@ function RequestsPage() {
                     <span className="text-[10px] text-muted-foreground">{r.time}</span>
                   </div>
                   <h3 className="font-semibold text-sm truncate">{r.subject}</h3>
-                  <p className="text-[10px] text-muted-foreground mt-1 truncate">{r.address}</p>
+                  <div className="flex items-center justify-between mt-2">
+                    <p className="text-[10px] text-muted-foreground mt-1 truncate max-w-[140px]">{r.address}</p>
+                    <div className="flex items-center gap-1 text-[9px] text-orange-600 font-medium">
+                      <Timer className="h-3 w-3" /> {r.deadline}
+                    </div>
+                  </div>
                 </div>
+
               ))}
             </div>
           </ScrollArea>
@@ -158,11 +180,20 @@ function RequestsPage() {
                 <CardDescription className="text-[10px] sm:text-xs">{selectedReq.address}</CardDescription>
               </div>
             </div>
-            <div className="flex flex-col items-end gap-1">
-              <Badge variant="outline" className="text-[10px]">{selectedReq.channel}</Badge>
-              <span className="text-[10px] text-muted-foreground hidden sm:inline">ID: {selectedReq.id}</span>
+            <div className="flex items-center gap-4">
+              <div className="hidden sm:flex flex-col items-end gap-1 text-right border-r pr-4">
+                <span className="text-[10px] font-bold uppercase text-muted-foreground">Канал: {selectedReq.channel}</span>
+                <span className="text-[9px] text-emerald-600 flex items-center gap-1">
+                  <ShieldCheck className="h-3 w-3" /> SLA Соблюден
+                </span>
+              </div>
+              <div className="flex flex-col items-end gap-1">
+                <Badge variant="outline" className="text-[10px]">{selectedReq.status === 'new' ? 'Новое' : 'В обработке'}</Badge>
+                <span className="text-[10px] text-muted-foreground hidden sm:inline">ID: {selectedReq.id}</span>
+              </div>
             </div>
           </CardHeader>
+
           <CardContent className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
             {selectedReq.messages.map((m, i) => (
               <div key={i} className={cn("flex gap-3", m.sender === 'uk' ? 'flex-row-reverse' : '')}>
