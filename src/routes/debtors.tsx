@@ -59,10 +59,10 @@ function DebtorsPage() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none" onClick={() => alert('Экспорт реестра запущен')}>
             <Download className="mr-2 h-4 w-4" /> Выгрузить
           </Button>
-          <Button size="sm" className="flex-1 sm:flex-none">
+          <Button size="sm" className="flex-1 sm:flex-none" onClick={() => alert('Переход к массовым коммуникациям')}>
             <FileCheck className="mr-2 h-4 w-4" /> Рассылка
           </Button>
         </div>
@@ -188,8 +188,11 @@ function DebtorsPage() {
                         <DropdownMenuItem>
                           <Mail className="mr-2 h-4 w-4" /> Отправить на Email / в ЛК
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => alert('Настройка автообзвона для ' + debtor.account)}>
                           <Phone className="mr-2 h-4 w-4" /> Позвонить (автообзвон)
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => alert('Настройка массовой рассылки для ' + debtor.account)}>
+                          <Mail className="mr-2 h-4 w-4" /> Отправить Email / SMS
                         </DropdownMenuItem>
                         <DropdownMenuItem className="text-red-600">
                           <AlertCircle className="mr-2 h-4 w-4" /> Передать в суд
