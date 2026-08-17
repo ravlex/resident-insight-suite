@@ -157,6 +157,7 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [role, setRole] = useState<'admin' | 'resident'>('admin');
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -183,8 +184,8 @@ function RootComponent() {
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}>
           <div className="h-16 flex items-center justify-between px-6 border-b">
-            <span className="text-xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-              ИВЦ ЖКХ и ТЭК
+            <span className="text-xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent truncate">
+              {role === 'admin' ? 'ИВЦ ЖКХ и ТЭК' : 'Мой Дом'}
             </span>
             <button 
               className="lg:hidden p-2 rounded-md hover:bg-accent"
@@ -194,12 +195,21 @@ function RootComponent() {
             </button>
           </div>
           <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-            <SidebarItem to="/" icon={LayoutDashboard} onClick={() => setIsSidebarOpen(false)}>Дашборд</SidebarItem>
-            <SidebarItem to="/debtors" icon={Users} onClick={() => setIsSidebarOpen(false)}>Должники</SidebarItem>
-            <SidebarItem to="/requests" icon={MessageSquare} onClick={() => setIsSidebarOpen(false)}>Обращения</SidebarItem>
-            <SidebarItem to="/tickets" icon={Ticket} onClick={() => setIsSidebarOpen(false)}>Взаимодействие с ИВЦ</SidebarItem>
-            <SidebarItem to="/tasks" icon={CheckSquare} onClick={() => setIsSidebarOpen(false)}>Задачи</SidebarItem>
-            <SidebarItem to="/reports" icon={FileText} onClick={() => setIsSidebarOpen(false)}>Отчеты</SidebarItem>
+            {role === 'admin' ? (
+              <>
+                <SidebarItem to="/" icon={LayoutDashboard} onClick={() => setIsSidebarOpen(false)}>Дашборд</SidebarItem>
+                <SidebarItem to="/debtors" icon={Users} onClick={() => setIsSidebarOpen(false)}>Должники</SidebarItem>
+                <SidebarItem to="/requests" icon={MessageSquare} onClick={() => setIsSidebarOpen(false)}>Обращения</SidebarItem>
+                <SidebarItem to="/tickets" icon={Ticket} onClick={() => setIsSidebarOpen(false)}>Взаимодействие с ИВЦ</SidebarItem>
+                <SidebarItem to="/tasks" icon={CheckSquare} onClick={() => setIsSidebarOpen(false)}>Задачи</SidebarItem>
+                <SidebarItem to="/reports" icon={FileText} onClick={() => setIsSidebarOpen(false)}>Отчеты</SidebarItem>
+              </>
+            ) : (
+              <>
+                <SidebarItem to="/resident/" icon={LayoutDashboard} onClick={() => setIsSidebarOpen(false)}>Главная</SidebarItem>
+                <SidebarItem to="/resident/bills" icon={FileText} onClick={() => setIsSidebarOpen(false)}>Квитанции</SidebarItem>
+              </>
+            )}
             <div className="pt-4 mt-4 border-t border-border">
               <SidebarItem to="/notifications" icon={Bell} onClick={() => setIsSidebarOpen(false)}>Уведомления</SidebarItem>
               <SidebarItem to="/settings" icon={Settings} onClick={() => setIsSidebarOpen(false)}>Настройки</SidebarItem>
@@ -211,8 +221,10 @@ function RootComponent() {
                 УК
               </div>
               <div className="flex flex-col overflow-hidden">
-                <span className="text-sm font-medium truncate">ООО "Уютный Дом"</span>
-                <span className="text-xs text-muted-foreground truncate">Администратор</span>
+                <span className="text-sm font-medium truncate">{role === 'admin' ? 'ООО "Уютный Дом"' : 'Иванов А.И.'}</span>
+                <button className="text-xs text-primary font-medium hover:underline text-left" onClick={() => setRole(r => r === 'admin' ? 'resident' : 'admin')}>
+                  Сменить роль ({role === 'admin' ? 'Админ' : 'Житель'})
+                </button>
               </div>
             </div>
           </div>
