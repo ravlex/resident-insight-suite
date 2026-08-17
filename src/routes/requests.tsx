@@ -71,13 +71,43 @@ const mockRequests = [
 function RequestsPage() {
   const [selectedId, setSelectedId] = React.useState('R-1042');
   const [showDetailOnMobile, setShowDetailOnMobile] = React.useState(false);
+  const [requests, setRequests] = React.useState(mockRequests);
+  const [replyText, setReplyText] = React.useState("");
+  const [isAiGenerating, setIsAiGenerating] = React.useState(false);
 
-  const selectedReq = mockRequests.find(r => r.id === selectedId) || mockRequests[0]!;
+  const selectedReq = requests.find(r => r.id === selectedId) || requests[0]!;
 
   const handleSelect = (id: string) => {
     setSelectedId(id);
     setShowDetailOnMobile(true);
   };
+
+  const handleSend = () => {
+    if (!replyText.trim()) return;
+    
+    const newRequests = requests.map(r => {
+      if (r.id === selectedId) {
+        return {
+          ...r,
+          status: 'process',
+          messages: [...r.messages, { sender: 'uk', text: replyText }]
+        };
+      }
+      return r;
+    });
+    
+    setRequests(newRequests);
+    setReplyText("");
+  };
+
+  const handleAiGenerate = () => {
+    setIsAiGenerating(true);
+    setTimeout(() => {
+      setReplyText("Уважаемый житель! По вашему обращению №" + selectedId + " сообщаем, что сумма в квитанции за май сформирована с учетом перерасчета за предыдущий период. Детальную расшифровку направим на ваш email.");
+      setIsAiGenerating(false);
+    }, 1500);
+  };
+
 
   return (
     <div className="space-y-6">
@@ -126,7 +156,8 @@ function RequestsPage() {
           </div>
           <ScrollArea className="flex-1 pr-4">
             <div className="space-y-3">
-              {mockRequests.map((r) => (
+              {requests.map((r) => (
+
                 <div 
                   key={r.id} 
                   onClick={() => handleSelect(r.id)}
