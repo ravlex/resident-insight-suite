@@ -125,25 +125,26 @@ function ReportsPage() {
                     <div 
                       key={template.id}
                       onClick={() => setSelectedTemplate(template.id)}
-                      className={`p-3 rounded-xl border-2 cursor-pointer transition-all shrink-0 w-[240px] lg:w-full ${
+                      className={`p-3 rounded-xl border-2 cursor-pointer transition-all shrink-0 w-[240px] lg:w-full group ${
                         selectedTemplate === template.id 
                           ? 'bg-[#F1F3F9] border-[#0F172A] shadow-sm' 
-                          : 'bg-white border-slate-200 hover:border-slate-300'
+                          : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                       }`}
                     >
+
                       <div className="flex items-center gap-3 w-full">
                         <div className={`p-2.5 rounded-lg flex items-center justify-center transition-colors shrink-0 ${
                           selectedTemplate === template.id 
                             ? 'bg-[#0F172A] text-white shadow-md' 
-                            : 'bg-slate-50 text-slate-500'
+                            : 'bg-slate-50 text-slate-500 group-hover:bg-slate-100 group-hover:text-slate-600'
                         }`}>
                           <template.icon className="h-5 w-5" />
                         </div>
 
                         <div className="flex-1 overflow-hidden">
 
-                          <p className={`text-sm font-semibold truncate ${
-                            selectedTemplate === template.id ? 'text-[#0F172A]' : 'text-slate-700'
+                          <p className={`text-sm font-semibold truncate transition-colors ${
+                            selectedTemplate === template.id ? 'text-[#0F172A]' : 'text-slate-700 group-hover:text-slate-900'
                           }`}>
                             {template.title}
                           </p>
