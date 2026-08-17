@@ -125,12 +125,13 @@ function ReportsPage() {
                     <div 
                       key={template.id}
                       onClick={() => setSelectedTemplate(template.id)}
-                      className={`p-3 rounded-xl border-2 cursor-pointer transition-all shrink-0 w-[240px] lg:w-full ${
+                      className={`p-3 rounded-xl border-2 cursor-pointer transition-all shrink-0 w-[240px] lg:w-full group ${
                         selectedTemplate === template.id 
                           ? 'bg-[#F1F3F9] border-[#0F172A] shadow-sm' 
-                          : 'bg-white border-slate-200 hover:border-slate-300'
+                          : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                       }`}
                     >
+
                       <div className="flex items-center gap-3 w-full">
                         <div className={`p-2.5 rounded-lg flex items-center justify-center transition-colors shrink-0 ${
                           selectedTemplate === template.id 
