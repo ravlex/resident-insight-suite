@@ -61,11 +61,16 @@ function RequestsPage() {
   const [selectedId, setSelectedId] = useState('1042');
   const [aiSuggestion, setAiSuggestion] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [showDetailOnMobile, setShowDetailOnMobile] = useState(false);
 
   const selectedRequest = mockRequests.find(r => r.id === selectedId) || mockRequests[0];
 
   if (!selectedRequest) return null;
 
+  const handleSelect = (id: string) => {
+    setSelectedId(id);
+    setShowDetailOnMobile(true);
+  };
 
   const generateAiReply = () => {
     setIsGenerating(true);
@@ -78,9 +83,12 @@ function RequestsPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-160px)] flex gap-6">
+    <div className="flex flex-col lg:flex-row h-full lg:h-[calc(100vh-160px)] gap-6 overflow-hidden">
       {/* List */}
-      <div className="w-1/3 flex flex-col gap-4">
+      <div className={cn(
+        "w-full lg:w-1/3 flex flex-col gap-4 overflow-hidden",
+        showDetailOnMobile ? "hidden lg:flex" : "flex"
+      )}>
         <div className="relative">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input placeholder="Поиск обращений..." className="pl-9" />
@@ -90,7 +98,7 @@ function RequestsPage() {
             {mockRequests.map((req) => (
               <div 
                 key={req.id} 
-                onClick={() => setSelectedId(req.id)}
+                onClick={() => handleSelect(req.id)}
                 className={cn(
                   "p-4 border rounded-xl cursor-pointer transition-all hover:border-primary/50",
                   selectedId === req.id ? "bg-primary/5 border-primary shadow-sm" : "bg-card"
@@ -121,20 +129,28 @@ function RequestsPage() {
       </div>
 
       {/* Detail */}
-      <div className="flex-1 flex flex-col gap-6 overflow-hidden">
-        <Card className="flex-1 flex flex-col">
-          <CardHeader className="border-b pb-4">
-            <div className="flex justify-between items-start">
+      <div className={cn(
+        "flex-1 flex flex-col gap-6 overflow-hidden",
+        !showDetailOnMobile ? "hidden lg:flex" : "flex"
+      )}>
+        <Card className="flex-1 flex flex-col overflow-hidden">
+          <CardHeader className="border-b pb-4 px-4 sm:px-6">
+            <div className="flex items-center gap-2 lg:hidden mb-4">
+              <Button variant="ghost" size="sm" onClick={() => setShowDetailOnMobile(false)} className="-ml-2">
+                <ArrowRight className="h-4 w-4 rotate-180 mr-2" /> Назад
+              </Button>
+            </div>
+            <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
               <div>
                 <CardTitle className="text-xl">{selectedRequest.subject}</CardTitle>
                 <CardDescription className="flex items-center gap-2 mt-1">
                   <User className="h-3 w-3" /> {selectedRequest.user} • л/с 1294028 • {selectedRequest.address}
                 </CardDescription>
               </div>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm">Делегировать</Button>
-                <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700">
-                  <CheckCircle2 className="mr-2 h-4 w-4" /> Закрыть
+              <div className="flex gap-2 w-full sm:w-auto">
+                <Button variant="outline" size="sm" className="flex-1 sm:flex-none">Делегировать</Button>
+                <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 flex-1 sm:flex-none">
+                  <CheckCircle2 className="sm:mr-2 h-4 w-4" /> <span className="hidden sm:inline">Закрыть</span>
                 </Button>
               </div>
             </div>
@@ -168,7 +184,7 @@ function RequestsPage() {
               </div>
             )}
           </CardContent>
-          <div className="p-6 border-t bg-muted/5">
+          <div className="p-4 sm:p-6 border-t bg-muted/5">
             <div className="flex gap-2 mb-4">
               <Button 
                 variant="outline" 

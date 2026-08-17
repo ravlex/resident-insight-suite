@@ -51,19 +51,19 @@ function DebtorsPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Работа с должниками</h1>
-          <p className="text-muted-foreground mt-1">
-            Управление дебиторской задолженностью и автоматизация взыскания
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Работа с должниками</h1>
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">
+            Управление задолженностью и взыскание
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline">
-            <Download className="mr-2 h-4 w-4" /> Выгрузить реестр
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
+            <Download className="mr-2 h-4 w-4" /> Выгрузить
           </Button>
-          <Button>
-            <FileCheck className="mr-2 h-4 w-4" /> Массовая рассылка уведомлений
+          <Button size="sm" className="flex-1 sm:flex-none">
+            <FileCheck className="mr-2 h-4 w-4" /> Рассылка
           </Button>
         </div>
       </div>
@@ -134,8 +134,9 @@ function DebtorsPage() {
             </div>
           </div>
         </CardHeader>
-        <CardContent>
-          <Table>
+        <CardContent className="p-0 sm:p-6">
+          <div className="overflow-x-auto">
+            <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>Лицевой счет</TableHead>
@@ -199,7 +200,8 @@ function DebtorsPage() {
                 </TableRow>
               ))}
             </TableBody>
-          </Table>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </div>
