@@ -21,7 +21,8 @@ import {
   Menu,
   X,
   Ticket,
-  CheckSquare
+  CheckSquare,
+  MapIcon
 } from "lucide-react";
 
 import appCss from "../styles.css?url";
@@ -203,6 +204,7 @@ function RootComponent() {
                 <SidebarItem to="/tickets" icon={Ticket} onClick={() => setIsSidebarOpen(false)}>Взаимодействие с ИВЦ</SidebarItem>
                 <SidebarItem to="/tasks" icon={CheckSquare} onClick={() => setIsSidebarOpen(false)}>Задачи</SidebarItem>
                 <SidebarItem to="/reports" icon={FileText} onClick={() => setIsSidebarOpen(false)}>Отчеты</SidebarItem>
+                <SidebarItem to="/map" icon={MapIcon} onClick={() => setIsSidebarOpen(false)}>Карта долгов</SidebarItem>
               </>
             ) : (
               <>
