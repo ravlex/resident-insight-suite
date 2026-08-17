@@ -28,6 +28,7 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const collectionData = [
   { name: 'Янв', billed: 4500000, collected: 4100000 },
