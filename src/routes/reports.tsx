@@ -196,11 +196,15 @@ function ReportsPage() {
                           </SelectContent>
                         </Select>
                       </div>
-                      <div className="space-y-2 sm:col-span-2">
+                      <div className="space-y-3 sm:col-span-2">
                         <label className="text-sm font-semibold text-slate-700">Дополнительные фильтры</label>
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                           {['По услугам', 'По долгу > 3 мес', 'Только перерасчеты', 'С активными счетчиками'].map(f => (
-                            <Badge key={f} variant="outline" className="py-2 justify-center cursor-pointer hover:bg-slate-50 transition-colors">
+                            <Badge 
+                              key={f} 
+                              variant="outline" 
+                              className="py-2 justify-center cursor-pointer transition-all border-slate-200 text-slate-600 hover:bg-[#0F172A] hover:text-white hover:border-[#0F172A] active:scale-95 select-none"
+                            >
                               <Plus className="h-3 w-3 mr-1" /> {f}
                             </Badge>
                           ))}
