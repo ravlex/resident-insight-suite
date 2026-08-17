@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
+import * as React from "react";
 import { Bell, CheckCircle2, AlertCircle, Clock } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/notifications")({
   component: NotificationsPage,
@@ -28,6 +31,7 @@ function NotificationsPage() {
               n.type === 'warning' ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-blue-600'
             )}>
               {n.type === 'critical' ? <AlertCircle className="h-5 w-5" /> : <Bell className="h-5 w-5" />}
+
             </div>
             <div>
               <p className="font-semibold">{n.title}</p>
@@ -44,4 +48,4 @@ function NotificationsPage() {
   );
 }
 
-function cn(...inputs: any[]) { return inputs.filter(Boolean).join(" "); }
+

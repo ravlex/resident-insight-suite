@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import * as React from "react";
 import { 
+
   MessageSquareText, 
   Search, 
   Send, 
@@ -74,7 +75,8 @@ const mockTickets = [
 ];
 
 function TicketsPage() {
-  const [selectedId, setSelectedId] = useState('T-2026-042');
+  const [selectedId, setSelectedId] = React.useState('T-2026-042');
+
   const selectedTicket = mockTickets.find(t => t.id === selectedId) || mockTickets[0]!;
 
   const getStatusColor = (status: string) => {

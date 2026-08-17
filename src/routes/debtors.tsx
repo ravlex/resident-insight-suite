@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import * as React from "react";
 import { 
+
   Search, 
   Filter, 
   Download, 
@@ -47,7 +48,8 @@ const mockDebtors = [
 ];
 
 function DebtorsPage() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = React.useState("");
+
 
   return (
     <div className="space-y-8">
