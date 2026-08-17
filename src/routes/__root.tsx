@@ -112,10 +112,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
-function SidebarItem({ to, icon: Icon, children }: { to: string; icon: any; children: React.ReactNode }) {
+function SidebarItem({ 
+  to, 
+  icon: Icon, 
+  children,
+  onClick
+}: { 
+  to: string; 
+  icon: any; 
+  children: React.ReactNode;
+  onClick?: () => void;
+}) {
   return (
     <Link
       to={to}
+      onClick={onClick}
       activeProps={{ className: "bg-primary/10 text-primary" }}
       inactiveProps={{ className: "text-muted-foreground hover:bg-accent hover:text-foreground" }}
       className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all"
