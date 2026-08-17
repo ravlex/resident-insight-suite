@@ -135,7 +135,7 @@ function ReportsPage() {
                       <div className="flex items-center gap-3 w-full">
                         <div className={`p-2.5 rounded-lg flex items-center justify-center transition-colors shrink-0 ${
                           selectedTemplate === template.id 
-                            ? 'bg-[#0F172A] text-white shadow-md' 
+                            ? 'bg-white/10 text-white shadow-sm border border-white/20' 
                             : 'bg-slate-50 text-slate-500 group-hover:bg-slate-100 group-hover:text-slate-600'
                         }`}>
                           <template.icon className="h-5 w-5" />
