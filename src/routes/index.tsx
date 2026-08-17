@@ -97,24 +97,56 @@ function MetricCard({ title, value, subtext, trend, trendValue, icon: Icon }: an
 
 function Index() {
   const [selectedService, setSelectedService] = React.useState("all");
+  const [aiInputValue, setAiInputValue] = React.useState("");
+  const [isAiLoading, setIsAiLoading] = React.useState(false);
+  const [aiResponse, setAiResponse] = React.useState<string | null>(null);
 
+  const handleAiSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!aiInputValue.trim()) return;
+    
+    setIsAiLoading(true);
+    setAiResponse(null);
+    
+    setTimeout(() => {
+      setIsAiLoading(false);
+      setAiResponse("На основе анализа за май 2026 года, рост задолженности более чем на 15% зафиксирован по 3 объектам: ул. Ленина 15, ул. Мира 4 и ул. Победы 10. Основная причина — неоплата услуг ГВС.");
+    }, 1500);
+  };
 
   return (
     <div className="space-y-8">
       {/* AI Search Bar */}
-      <div className="relative group">
+      <form onSubmit={handleAiSubmit} className="relative group">
         <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
           <Sparkles className="h-5 w-5 text-primary animate-pulse" />
         </div>
         <input 
           type="text" 
+          value={aiInputValue}
+          onChange={(e) => setAiInputValue(e.target.value)}
           placeholder="Спросите AI об аналитике (например: 'Покажи дома с ростом долга за май')" 
           className="w-full h-14 pl-12 pr-4 bg-white border-2 border-primary/20 rounded-2xl shadow-sm focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-sm outline-none"
         />
         <div className="absolute inset-y-0 right-4 flex items-center">
-          <Button size="sm" className="h-8">Анализировать</Button>
+          <Button type="submit" size="sm" className="h-8" disabled={isAiLoading}>
+            {isAiLoading ? "Анализ..." : "Анализировать"}
+          </Button>
         </div>
-      </div>
+      </form>
+
+      {aiResponse && (
+        <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="flex items-start gap-3">
+            <Sparkles className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-medium text-slate-900">{aiResponse}</p>
+              <Button variant="link" className="p-0 h-auto text-xs mt-2 text-primary" onClick={() => setAiResponse(null)}>Ок, понятно</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

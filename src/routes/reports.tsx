@@ -299,7 +299,7 @@ function ReportsPage() {
 
 
               {lastReport && (
-                <Card className="border-emerald-200 bg-emerald-50/30 p-4 flex items-center justify-between">
+                <Card className="border-emerald-200 bg-emerald-50/30 p-4 flex items-center justify-between animate-in fade-in slide-in-from-top-2 duration-300">
                   <div className="flex items-center gap-3">
                     <CheckCircle2 className="h-6 w-6 text-emerald-600" />
                     <div>
@@ -307,9 +307,18 @@ function ReportsPage() {
                       <p className="text-xs text-emerald-700">Создан в {lastReport}</p>
                     </div>
                   </div>
-                  <Button className="bg-emerald-600 hover:bg-emerald-700">Скачать файл</Button>
+                  <Button 
+                    className="bg-emerald-600 hover:bg-emerald-700"
+                    onClick={() => {
+                      alert("Файл скачивается...");
+                      setLastReport(null);
+                    }}
+                  >
+                    Скачать файл
+                  </Button>
                 </Card>
               )}
+
             </div>
           </div>
         </TabsContent>

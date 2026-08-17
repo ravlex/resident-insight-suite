@@ -93,8 +93,29 @@ const mockTickets = [
 
 function TicketsPage() {
   const [selectedId, setSelectedId] = React.useState('T-2026-042');
+  const [tickets, setTickets] = React.useState(mockTickets);
+  const [replyText, setReplyText] = React.useState("");
 
-  const selectedTicket = mockTickets.find(t => t.id === selectedId) || mockTickets[0]!;
+  const selectedTicket = tickets.find(t => t.id === selectedId) || tickets[0]!;
+
+  const handleSend = () => {
+    if (!replyText.trim()) return;
+    
+    const newTickets = tickets.map(t => {
+      if (t.id === selectedId) {
+        return {
+          ...t,
+          status: 'process',
+          messages: [...t.messages, { sender: 'УК', text: replyText }]
+        };
+      }
+      return t;
+    });
+    
+    setTickets(newTickets);
+    setReplyText("");
+  };
+
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -152,10 +173,11 @@ function TicketsPage() {
           </div>
           <ScrollArea className="flex-1 pr-4">
             <div className="space-y-3">
-              {mockTickets.map((t) => (
+              {tickets.map((t) => (
                 <div 
                   key={t.id} 
                   onClick={() => setSelectedId(t.id)}
+
                   className={cn(
                     "p-4 border rounded-xl cursor-pointer hover:border-primary/50 transition-all",
                     selectedId === t.id ? "bg-primary/5 border-primary shadow-sm" : "bg-card"
@@ -212,7 +234,7 @@ function TicketsPage() {
               </div>
             </div>
             {selectedTicket.messages.map((m, i) => (
-              <div key={i} className={cn("flex gap-3", m.sender === 'ИВЦ' ? 'flex-row-reverse' : '')}>
+              <div key={i} className={cn("flex gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300", m.sender === 'ИВЦ' ? 'flex-row-reverse' : '')}>
                 <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center shrink-0">
                   {m.sender === 'УК' ? <User className="h-4 w-4" /> : <Inbox className="h-4 w-4" />}
                 </div>
@@ -223,9 +245,16 @@ function TicketsPage() {
             ))}
           </CardContent>
           <div className="p-4 border-t bg-muted/5 flex gap-2">
-            <Input placeholder="Написать ответ или прикрепить документ..." className="bg-background" />
-            <Button size="icon"><Send className="h-4 w-4" /></Button>
+            <Input 
+              value={replyText}
+              onChange={(e) => setReplyText(e.target.value)}
+              placeholder="Написать ответ или прикрепить документ..." 
+              className="bg-background" 
+              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            />
+            <Button size="icon" onClick={handleSend}><Send className="h-4 w-4" /></Button>
           </div>
+
         </Card>
       </div>
     </div>

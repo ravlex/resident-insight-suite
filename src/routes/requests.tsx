@@ -71,13 +71,43 @@ const mockRequests = [
 function RequestsPage() {
   const [selectedId, setSelectedId] = React.useState('R-1042');
   const [showDetailOnMobile, setShowDetailOnMobile] = React.useState(false);
+  const [requests, setRequests] = React.useState(mockRequests);
+  const [replyText, setReplyText] = React.useState("");
+  const [isAiGenerating, setIsAiGenerating] = React.useState(false);
 
-  const selectedReq = mockRequests.find(r => r.id === selectedId) || mockRequests[0]!;
+  const selectedReq = requests.find(r => r.id === selectedId) || requests[0]!;
 
   const handleSelect = (id: string) => {
     setSelectedId(id);
     setShowDetailOnMobile(true);
   };
+
+  const handleSend = () => {
+    if (!replyText.trim()) return;
+    
+    const newRequests = requests.map(r => {
+      if (r.id === selectedId) {
+        return {
+          ...r,
+          status: 'process',
+          messages: [...r.messages, { sender: 'uk', text: replyText }]
+        };
+      }
+      return r;
+    });
+    
+    setRequests(newRequests);
+    setReplyText("");
+  };
+
+  const handleAiGenerate = () => {
+    setIsAiGenerating(true);
+    setTimeout(() => {
+      setReplyText("Уважаемый житель! По вашему обращению №" + selectedId + " сообщаем, что сумма в квитанции за май сформирована с учетом перерасчета за предыдущий период. Детальную расшифровку направим на ваш email.");
+      setIsAiGenerating(false);
+    }, 1500);
+  };
+
 
   return (
     <div className="space-y-6">
@@ -126,7 +156,8 @@ function RequestsPage() {
           </div>
           <ScrollArea className="flex-1 pr-4">
             <div className="space-y-3">
-              {mockRequests.map((r) => (
+              {requests.map((r) => (
+
                 <div 
                   key={r.id} 
                   onClick={() => handleSelect(r.id)}
@@ -196,7 +227,7 @@ function RequestsPage() {
 
           <CardContent className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
             {selectedReq.messages.map((m, i) => (
-              <div key={i} className={cn("flex gap-3", m.sender === 'uk' ? 'flex-row-reverse' : '')}>
+              <div key={i} className={cn("flex gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300", m.sender === 'uk' ? 'flex-row-reverse' : '')}>
                 <div className={cn("p-4 rounded-2xl max-w-[85%] sm:max-w-[80%]", m.sender === 'resident' ? 'bg-muted/50 rounded-tl-none' : 'bg-primary text-white rounded-tr-none')}>
                   <p className="text-sm">{m.text}</p>
                 </div>
@@ -205,16 +236,28 @@ function RequestsPage() {
           </CardContent>
           <div className="p-4 border-t bg-muted/5">
             <div className="flex gap-2">
-              <Input placeholder="Ответить жителю..." className="bg-background" />
-              <Button size="icon"><Send className="h-4 w-4" /></Button>
+              <Input 
+                value={replyText}
+                onChange={(e) => setReplyText(e.target.value)}
+                placeholder="Ответить жителю..." 
+                className="bg-background" 
+                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+              />
+              <Button size="icon" onClick={handleSend}><Send className="h-4 w-4" /></Button>
             </div>
             <div className="flex gap-4 mt-2 px-1">
-              <button className="text-[10px] text-primary hover:underline flex items-center gap-1">
-                <Sparkles className="h-3 w-3" /> Сгенерировать ответ AI
+              <button 
+                onClick={handleAiGenerate}
+                disabled={isAiGenerating}
+                className="text-[10px] text-primary hover:underline flex items-center gap-1 disabled:opacity-50"
+              >
+                <Sparkles className={cn("h-3 w-3", isAiGenerating && "animate-spin")} /> 
+                {isAiGenerating ? "Генерация..." : "Сгенерировать ответ AI"}
               </button>
               <button className="text-[10px] text-muted-foreground hover:underline">Шаблоны ответов</button>
             </div>
           </div>
+
         </Card>
       </div>
     </div>
