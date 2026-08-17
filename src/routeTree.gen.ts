@@ -11,12 +11,15 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DebtorsRouteImport } from './routes/debtors'
+import { Route as MapRouteImport } from './routes/map'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as RequestsRouteImport } from './routes/requests'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as TasksRouteImport } from './routes/tasks'
 import { Route as TicketsRouteImport } from './routes/tickets'
+import { Route as ResidentIndexRouteImport } from './routes/resident/index'
+import { Route as ResidentBillsRouteImport } from './routes/resident/bills'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -26,6 +29,11 @@ const IndexRoute = IndexRouteImport.update({
 const DebtorsRoute = DebtorsRouteImport.update({
   id: '/debtors',
   path: '/debtors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MapRoute = MapRouteImport.update({
+  id: '/map',
+  path: '/map',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotificationsRoute = NotificationsRouteImport.update({
@@ -58,80 +66,111 @@ const TicketsRoute = TicketsRouteImport.update({
   path: '/tickets',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResidentIndexRoute = ResidentIndexRouteImport.update({
+  id: '/resident/',
+  path: '/resident/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResidentBillsRoute = ResidentBillsRouteImport.update({
+  id: '/resident/bills',
+  path: '/resident/bills',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/debtors': typeof DebtorsRoute
+  '/map': typeof MapRoute
   '/notifications': typeof NotificationsRoute
   '/reports': typeof ReportsRoute
   '/requests': typeof RequestsRoute
   '/settings': typeof SettingsRoute
   '/tasks': typeof TasksRoute
   '/tickets': typeof TicketsRoute
+  '/resident/bills': typeof ResidentBillsRoute
+  '/resident/': typeof ResidentIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/debtors': typeof DebtorsRoute
+  '/map': typeof MapRoute
   '/notifications': typeof NotificationsRoute
   '/reports': typeof ReportsRoute
   '/requests': typeof RequestsRoute
   '/settings': typeof SettingsRoute
   '/tasks': typeof TasksRoute
   '/tickets': typeof TicketsRoute
+  '/resident/bills': typeof ResidentBillsRoute
+  '/resident': typeof ResidentIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/debtors': typeof DebtorsRoute
+  '/map': typeof MapRoute
   '/notifications': typeof NotificationsRoute
   '/reports': typeof ReportsRoute
   '/requests': typeof RequestsRoute
   '/settings': typeof SettingsRoute
   '/tasks': typeof TasksRoute
   '/tickets': typeof TicketsRoute
+  '/resident/bills': typeof ResidentBillsRoute
+  '/resident/': typeof ResidentIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/debtors'
+    | '/map'
     | '/notifications'
     | '/reports'
     | '/requests'
     | '/settings'
     | '/tasks'
     | '/tickets'
+    | '/resident/bills'
+    | '/resident/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/debtors'
+    | '/map'
     | '/notifications'
     | '/reports'
     | '/requests'
     | '/settings'
     | '/tasks'
     | '/tickets'
+    | '/resident/bills'
+    | '/resident'
   id:
     | '__root__'
     | '/'
     | '/debtors'
+    | '/map'
     | '/notifications'
     | '/reports'
     | '/requests'
     | '/settings'
     | '/tasks'
     | '/tickets'
+    | '/resident/bills'
+    | '/resident/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DebtorsRoute: typeof DebtorsRoute
+  MapRoute: typeof MapRoute
   NotificationsRoute: typeof NotificationsRoute
   ReportsRoute: typeof ReportsRoute
   RequestsRoute: typeof RequestsRoute
   SettingsRoute: typeof SettingsRoute
   TasksRoute: typeof TasksRoute
   TicketsRoute: typeof TicketsRoute
+  ResidentBillsRoute: typeof ResidentBillsRoute
+  ResidentIndexRoute: typeof ResidentIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -148,6 +187,13 @@ declare module '@tanstack/react-router' {
       path: '/debtors'
       fullPath: '/debtors'
       preLoaderRoute: typeof DebtorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/map': {
+      id: '/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof MapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notifications': {
@@ -192,18 +238,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TicketsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/resident/': {
+      id: '/resident/'
+      path: '/resident'
+      fullPath: '/resident/'
+      preLoaderRoute: typeof ResidentIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resident/bills': {
+      id: '/resident/bills'
+      path: '/resident/bills'
+      fullPath: '/resident/bills'
+      preLoaderRoute: typeof ResidentBillsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DebtorsRoute: DebtorsRoute,
+  MapRoute: MapRoute,
   NotificationsRoute: NotificationsRoute,
   ReportsRoute: ReportsRoute,
   RequestsRoute: RequestsRoute,
   SettingsRoute: SettingsRoute,
   TasksRoute: TasksRoute,
   TicketsRoute: TicketsRoute,
+  ResidentBillsRoute: ResidentBillsRoute,
+  ResidentIndexRoute: ResidentIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
