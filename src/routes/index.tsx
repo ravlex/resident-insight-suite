@@ -88,18 +88,18 @@ function MetricCard({ title, value, subtext, trend, trendValue, icon: Icon }: an
 function Index() {
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Обзор показателей</h1>
-          <p className="text-muted-foreground mt-1">
-            Оперативная сводка по сборам и задолженности за текущий период
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Обзор показателей</h1>
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">
+            Оперативная сводка по сборам и задолженности
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm">
-            <Download className="mr-2 h-4 w-4" /> Экспорт PDF
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
+            <Download className="mr-2 h-4 w-4" /> <span className="hidden xs:inline">Экспорт</span> PDF
           </Button>
-          <Button size="sm">Сформировать отчет</Button>
+          <Button size="sm" className="flex-1 sm:flex-none">Сформировать отчет</Button>
         </div>
       </div>
 
