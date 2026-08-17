@@ -153,29 +153,47 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen relative">
+        {/* Sidebar Overlay for Mobile */}
+        {isSidebarOpen && (
+          <div 
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
+
         {/* Sidebar */}
-        <aside className="w-64 border-r bg-card flex flex-col fixed inset-y-0 z-50">
-          <div className="h-16 flex items-center px-6 border-b">
+        <aside className={cn(
+          "w-64 border-r bg-card flex flex-col fixed inset-y-0 z-50 transition-transform duration-300 ease-in-out lg:translate-x-0",
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        )}>
+          <div className="h-16 flex items-center justify-between px-6 border-b">
             <span className="text-xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
               ИВЦ ЖКХ и ТЭК
             </span>
+            <button 
+              className="lg:hidden p-2 rounded-md hover:bg-accent"
+              onClick={() => setIsSidebarOpen(false)}
+            >
+              <X className="h-5 w-5" />
+            </button>
           </div>
           <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-            <SidebarItem to="/" icon={LayoutDashboard}>Дашборд</SidebarItem>
-            <SidebarItem to="/debtors" icon={Users}>Должники</SidebarItem>
-            <SidebarItem to="/requests" icon={MessageSquare}>Обращения</SidebarItem>
-            <SidebarItem to="/reports" icon={FileText}>Отчеты</SidebarItem>
+            <SidebarItem to="/" icon={LayoutDashboard} onClick={() => setIsSidebarOpen(false)}>Дашборд</SidebarItem>
+            <SidebarItem to="/debtors" icon={Users} onClick={() => setIsSidebarOpen(false)}>Должники</SidebarItem>
+            <SidebarItem to="/requests" icon={MessageSquare} onClick={() => setIsSidebarOpen(false)}>Обращения</SidebarItem>
+            <SidebarItem to="/reports" icon={FileText} onClick={() => setIsSidebarOpen(false)}>Отчеты</SidebarItem>
             <div className="pt-4 mt-4 border-t border-border">
-              <SidebarItem to="/settings" icon={Settings}>Настройки</SidebarItem>
+              <SidebarItem to="/settings" icon={Settings} onClick={() => setIsSidebarOpen(false)}>Настройки</SidebarItem>
             </div>
           </nav>
           <div className="p-4 border-t border-border mt-auto">
             <div className="flex items-center gap-3 px-2 py-2">
-              <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+              <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold shrink-0">
                 УК
               </div>
               <div className="flex flex-col overflow-hidden">
@@ -187,20 +205,26 @@ function RootComponent() {
         </aside>
 
         {/* Main Content */}
-        <div className="flex-1 pl-64 flex flex-col">
+        <div className="flex-1 lg:pl-64 flex flex-col min-w-0">
           {/* Header */}
-          <header className="h-16 border-b bg-card/50 backdrop-blur sticky top-0 z-40 flex items-center justify-between px-8">
+          <header className="h-16 border-b bg-card/50 backdrop-blur sticky top-0 z-40 flex items-center justify-between px-4 sm:px-8">
             <div className="flex items-center gap-4 flex-1">
-              <div className="relative w-full max-w-md">
+              <button 
+                className="lg:hidden p-2 rounded-md hover:bg-accent"
+                onClick={() => setIsSidebarOpen(true)}
+              >
+                <Menu className="h-5 w-5" />
+              </button>
+              <div className="relative w-full max-w-md hidden sm:block">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <input
                   type="search"
-                  placeholder="Поиск по лицевым счетам, адресам..."
+                  placeholder="Поиск..."
                   className="w-full bg-background border rounded-md pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
               </div>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               <button className="relative p-2 rounded-full hover:bg-accent transition-colors">
                 <Bell className="h-5 w-5" />
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-background"></span>
@@ -211,7 +235,7 @@ function RootComponent() {
             </div>
           </header>
 
-          <main className="flex-1 p-8">
+          <main className="flex-1 p-4 sm:p-8 overflow-x-hidden">
             <Outlet />
           </main>
         </div>
