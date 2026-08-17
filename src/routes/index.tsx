@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import * as React from "react";
 import { 
+
   TrendingUp, 
   TrendingDown, 
   Wallet, 
