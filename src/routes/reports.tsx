@@ -143,8 +143,8 @@ function ReportsPage() {
 
                         <div className="flex-1 overflow-hidden">
 
-                          <p className={`text-sm font-semibold truncate ${
-                            selectedTemplate === template.id ? 'text-[#0F172A]' : 'text-slate-700'
+                          <p className={`text-sm font-semibold truncate transition-colors ${
+                            selectedTemplate === template.id ? 'text-[#0F172A]' : 'text-slate-700 group-hover:text-slate-900'
                           }`}>
                             {template.title}
                           </p>
