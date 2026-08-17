@@ -28,6 +28,7 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const collectionData = [
   { name: 'Янв', billed: 4500000, collected: 4100000 },
@@ -159,8 +160,8 @@ function Index() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="col-span-1">
           <CardHeader>
-            <CardTitle>Динамика сборов</CardTitle>
-            <CardDescription>Сравнение начислений и фактических платежей (6 мес.)</CardDescription>
+            <CardTitle>Динамика сборов vs Рынок</CardTitle>
+            <CardDescription>Сравнение собираемости нашей УК со средним значением по ИВЦ</CardDescription>
           </CardHeader>
           <CardContent className="h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -172,8 +173,8 @@ function Index() {
                   cursor={{fill: 'rgba(0,0,0,0.05)'}}
                   contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
                 />
-                <Bar dataKey="billed" name="Начислено" fill="#e2e8f0" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="collected" name="Собрано" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="collected" name="Наша УК" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="billed" name="Среднее по ИВЦ" fill="#cbd5e1" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -181,26 +182,26 @@ function Index() {
 
         <Card className="col-span-1">
           <CardHeader>
-            <CardTitle>Сегментация дебиторской задолженности</CardTitle>
-            <CardDescription>Распределение должников по периоду просрочки</CardDescription>
+            <CardTitle>География обращений</CardTitle>
+            <CardDescription>Концентрация жалоб по домам (топ 5)</CardDescription>
           </CardHeader>
           <CardContent className="h-[350px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={debtorSegmentation} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                <XAxis type="number" hide />
-                <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={80} />
-                <Tooltip 
-                  cursor={{fill: 'rgba(0,0,0,0.05)'}}
-                  contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                />
-                <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={30}>
-                  {debtorSegmentation.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+            <div className="space-y-4">
+              {[
+                { address: 'ул. Ленина, д. 15', complaints: 14, trend: 'up' },
+                { address: 'ул. Мира, д. 4', complaints: 9, trend: 'up' },
+                { address: 'ул. Победы, д. 10', complaints: 5, trend: 'down' },
+                { address: 'ул. Советская, д. 2', complaints: 3, trend: 'stable' },
+                { address: 'ул. Гагарина, д. 7', complaints: 2, trend: 'stable' },
+              ].map((h, i) => (
+                <div key={i} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                  <span className="text-sm font-medium">{h.address}</span>
+                  <Badge variant={h.complaints > 10 ? "destructive" : "secondary"}>
+                    {h.complaints} жалоб
+                  </Badge>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       </div>
