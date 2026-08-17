@@ -76,9 +76,10 @@ const schedules = [
 function ReportsPage() {
   const firstTemplate = reportTemplates[0];
   if (!firstTemplate) return null;
-  const [selectedTemplate, setSelectedTemplate] = useState(firstTemplate.id);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [lastReport, setLastReport] = useState<string | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = React.useState(firstTemplate.id);
+  const [isGenerating, setIsGenerating] = React.useState(false);
+  const [lastReport, setLastReport] = React.useState<string | null>(null);
+
 
   const handleGenerate = () => {
     setIsGenerating(true);

@@ -61,8 +61,9 @@ const mockRequests = [
 ];
 
 function RequestsPage() {
-  const [selectedId, setSelectedId] = useState('R-1042');
-  const [showDetailOnMobile, setShowDetailOnMobile] = useState(false);
+  const [selectedId, setSelectedId] = React.useState('R-1042');
+  const [showDetailOnMobile, setShowDetailOnMobile] = React.useState(false);
+
   const selectedReq = mockRequests.find(r => r.id === selectedId) || mockRequests[0]!;
 
   const handleSelect = (id: string) => {

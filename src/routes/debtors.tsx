@@ -48,7 +48,8 @@ const mockDebtors = [
 ];
 
 function DebtorsPage() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = React.useState("");
+
 
   return (
     <div className="space-y-8">

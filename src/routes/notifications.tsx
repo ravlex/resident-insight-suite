@@ -30,6 +30,7 @@ function NotificationsPage() {
               n.type === 'warning' ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-blue-600'
             )}>
               {n.type === 'critical' ? <AlertCircle className="h-5 w-5" /> : <Bell className="h-5 w-5" />}
+
             </div>
             <div>
               <p className="font-semibold">{n.title}</p>
