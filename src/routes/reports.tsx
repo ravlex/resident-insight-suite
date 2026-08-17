@@ -148,7 +148,7 @@ function ReportsPage() {
                           }`}>
                             {template.title}
                           </p>
-                          <Badge variant="secondary" className="mt-1 text-[10px] py-0">{template.category}</Badge>
+                          <Badge variant={selectedTemplate === template.id ? "outline" : "secondary"} className={`mt-1 text-[10px] py-0 ${selectedTemplate === template.id ? 'text-white/80 border-white/20' : ''}`}>{template.category}</Badge>
                         </div>
                       </div>
                     </div>
