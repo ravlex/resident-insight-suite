@@ -9,7 +9,9 @@ import {
   Clock,
   CheckCircle2,
   AlertCircle,
-  ArrowRight
+  ArrowRight,
+  TrendingUp,
+  ChevronRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,198 +23,163 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/requests")({
   component: RequestsPage,
   head: () => ({
-    meta: [{ title: "Обращения жителей | ИВЦ ЖКХ" }],
+    meta: [{ title: "Обращения жителей | ИВЦ ЖКХ и ТЭК" }],
   })
 });
 
 const mockRequests = [
   { 
-    id: '1042', 
+    id: 'R-1042', 
     user: 'Иванов А.И.', 
-    address: 'ул. Ленина, 15, кв 42',
-    subject: 'Неверное начисление за ГВС', 
+    address: 'ул. Ленина, д. 15, кв. 42',
+    subject: 'Перерасчет ХВС', 
     status: 'new', 
     priority: 'high',
+    channel: 'Чат',
+    isRepeat: true,
     time: '10 мин назад',
-    message: 'Здравствуйте. В квитанции за июнь указан объем ГВС 15м3, хотя по счетчикам у меня 4м3. Прошу сделать перерасчет.'
+    messages: [
+      { sender: 'resident', text: 'Здравствуйте, почему в квитанции за май стоит сумма за воду в 2 раза больше? Счетчик не менялся.' }
+    ]
   },
   { 
-    id: '1038', 
+    id: 'R-1038', 
     user: 'Петрова С.М.', 
-    address: 'ул. Ленина, 15, кв 89',
-    subject: 'Отсутствие отопления в одной комнате', 
+    address: 'ул. Мира, д. 4, кв. 12',
+    subject: 'Качество отопления', 
     status: 'process', 
     priority: 'medium',
-    time: '1 час назад',
-    message: 'Добрый день. В большой комнате батарея холодная, хотя в остальных греет хорошо. Проверьте систему.'
-  },
-  { 
-    id: '1035', 
-    user: 'Сидоров К.В.', 
-    address: 'ул. Мира, 4, кв 12',
-    subject: 'Замена прибора учета электроэнергии', 
-    status: 'new', 
-    priority: 'low',
-    time: '3 часа назад',
-    message: 'Срок поверки счетчика истек. Когда придет мастер для замены?'
+    channel: 'Госуслуги',
+    isRepeat: false,
+    time: '2 часа назад',
+    messages: [
+      { sender: 'resident', text: 'В квартире холодно, батареи почти не греют.' },
+      { sender: 'uk', text: 'Принято, техник придет завтра до 12:00 для замера температуры.' }
+    ]
   },
 ];
 
 function RequestsPage() {
-  const [selectedId, setSelectedId] = useState('1042');
-  const [aiSuggestion, setAiSuggestion] = useState("");
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [selectedId, setSelectedId] = useState('R-1042');
   const [showDetailOnMobile, setShowDetailOnMobile] = useState(false);
-
-  const selectedRequest = mockRequests.find(r => r.id === selectedId) || mockRequests[0];
-
-  if (!selectedRequest) return null;
+  const selectedReq = mockRequests.find(r => r.id === selectedId) || mockRequests[0]!;
 
   const handleSelect = (id: string) => {
     setSelectedId(id);
     setShowDetailOnMobile(true);
   };
 
-  const generateAiReply = () => {
-    setIsGenerating(true);
-    setTimeout(() => {
-      setAiSuggestion(
-        `Уважаемый ${selectedRequest.user}! Мы приняли ваше обращение №${selectedRequest.id} по вопросу "${selectedRequest.subject}". Наши специалисты проверят данные переданных показаний счетчиков и, в случае выявления расхождений, произведут корректировку в следующем платежном периоде. Ориентировочный срок проверки — 2 рабочих дня.`
-      );
-      setIsGenerating(false);
-    }, 1500);
-  };
-
   return (
-    <div className="flex flex-col lg:flex-row h-full lg:h-[calc(100vh-160px)] gap-6 overflow-hidden">
-      {/* List */}
-      <div className={cn(
-        "w-full lg:w-1/3 flex flex-col gap-4 overflow-hidden",
-        showDetailOnMobile ? "hidden lg:flex" : "flex"
-      )}>
-        <div className="relative">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Поиск обращений..." className="pl-9" />
-        </div>
-        <ScrollArea className="flex-1 pr-4">
-          <div className="space-y-3">
-            {mockRequests.map((req) => (
-              <div 
-                key={req.id} 
-                onClick={() => handleSelect(req.id)}
-                className={cn(
-                  "p-4 border rounded-xl cursor-pointer transition-all hover:border-primary/50",
-                  selectedId === req.id ? "bg-primary/5 border-primary shadow-sm" : "bg-card"
-                )}
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <Badge variant={req.priority === 'high' ? 'destructive' : 'outline'} className="text-[10px] px-1.5 py-0">
-                    {req.priority === 'high' ? 'СРОЧНО' : req.priority === 'medium' ? 'СРЕДНИЙ' : 'НИЗКИЙ'}
-                  </Badge>
-                  <span className="text-[10px] text-muted-foreground flex items-center gap-1">
-                    <Clock className="h-3 w-3" /> {req.time}
-                  </span>
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card className="p-4 bg-muted/50 border-none shadow-none">
+          <p className="text-[10px] font-bold text-muted-foreground uppercase">Всего за месяц</p>
+          <p className="text-xl font-bold mt-1">248</p>
+        </Card>
+        <Card className="p-4 bg-red-50/50 border-none shadow-none">
+          <p className="text-[10px] font-bold text-red-600 uppercase">Повторные</p>
+          <div className="flex items-center gap-2">
+            <p className="text-xl font-bold mt-1 text-red-900">18%</p>
+            <TrendingUp className="h-4 w-4 text-red-600" />
+          </div>
+        </Card>
+        <Card className="p-4 bg-blue-50/50 border-none shadow-none">
+          <p className="text-[10px] font-bold text-blue-600 uppercase">Популярный канал</p>
+          <p className="text-xl font-bold mt-1 text-blue-900">Чат (64%)</p>
+        </Card>
+        <Card className="p-4 bg-emerald-50/50 border-none shadow-none">
+          <p className="text-[10px] font-bold text-emerald-600 uppercase">Среднее время</p>
+          <p className="text-xl font-bold mt-1 text-emerald-900">1.5 ч</p>
+        </Card>
+      </div>
+
+      <div className="flex flex-col lg:flex-row h-[calc(100vh-320px)] gap-6 overflow-hidden">
+        <div className={cn(
+          "w-full lg:w-1/3 flex flex-col gap-4 overflow-hidden",
+          showDetailOnMobile ? "hidden lg:flex" : "flex"
+        )}>
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold text-lg">Обращения жителей</h2>
+            <Button size="sm" variant="outline">Рассылка</Button>
+          </div>
+          <div className="relative">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input placeholder="Поиск по жителю или адресу..." className="pl-9" />
+          </div>
+          <ScrollArea className="flex-1 pr-4">
+            <div className="space-y-3">
+              {mockRequests.map((r) => (
+                <div 
+                  key={r.id} 
+                  onClick={() => handleSelect(r.id)}
+                  className={cn(
+                    "p-4 border rounded-xl cursor-pointer hover:border-primary/50 transition-all",
+                    selectedId === r.id ? "bg-primary/5 border-primary shadow-sm" : "bg-card"
+                  )}
+                >
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="flex gap-2">
+                      <Badge variant={r.status === 'new' ? 'default' : 'secondary'} className="text-[9px]">
+                        {r.status === 'new' ? 'Новое' : 'В работе'}
+                      </Badge>
+                      {r.isRepeat && <Badge variant="destructive" className="text-[9px]">Повторное</Badge>}
+                    </div>
+                    <span className="text-[10px] text-muted-foreground">{r.time}</span>
+                  </div>
+                  <h3 className="font-semibold text-sm truncate">{r.subject}</h3>
+                  <p className="text-[10px] text-muted-foreground mt-1 truncate">{r.address}</p>
                 </div>
-                <h3 className="font-semibold text-sm line-clamp-1">{req.subject}</h3>
-                <p className="text-xs text-muted-foreground mt-1">{req.user} • {req.address}</p>
-                <div className="flex items-center gap-2 mt-3">
-                   {req.status === 'new' ? (
-                     <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100 text-[10px]">Новое</Badge>
-                   ) : (
-                     <Badge className="bg-orange-100 text-orange-700 hover:bg-orange-100 text-[10px]">В работе</Badge>
-                   )}
-                   <span className="text-[10px] text-muted-foreground ml-auto">№{req.id}</span>
+              ))}
+            </div>
+          </ScrollArea>
+        </div>
+
+        <Card className={cn(
+          "flex-1 flex flex-col overflow-hidden",
+          !showDetailOnMobile ? "hidden lg:flex" : "flex"
+        )}>
+          <CardHeader className="border-b px-4 sm:px-6 py-4 flex flex-row items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="lg:hidden p-0 h-auto"
+                onClick={() => setShowDetailOnMobile(false)}
+              >
+                <ArrowRight className="h-6 w-6 rotate-180 mr-2" />
+              </Button>
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                {selectedReq.user.charAt(0)}
+              </div>
+              <div>
+                <CardTitle className="text-base sm:text-lg">{selectedReq.user}</CardTitle>
+                <CardDescription className="text-[10px] sm:text-xs">{selectedReq.address}</CardDescription>
+              </div>
+            </div>
+            <div className="flex flex-col items-end gap-1">
+              <Badge variant="outline" className="text-[10px]">{selectedReq.channel}</Badge>
+              <span className="text-[10px] text-muted-foreground hidden sm:inline">ID: {selectedReq.id}</span>
+            </div>
+          </CardHeader>
+          <CardContent className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+            {selectedReq.messages.map((m, i) => (
+              <div key={i} className={cn("flex gap-3", m.sender === 'uk' ? 'flex-row-reverse' : '')}>
+                <div className={cn("p-4 rounded-2xl max-w-[85%] sm:max-w-[80%]", m.sender === 'resident' ? 'bg-muted/50 rounded-tl-none' : 'bg-primary text-white rounded-tr-none')}>
+                  <p className="text-sm">{m.text}</p>
                 </div>
               </div>
             ))}
-          </div>
-        </ScrollArea>
-      </div>
-
-      {/* Detail */}
-      <div className={cn(
-        "flex-1 flex flex-col gap-6 overflow-hidden",
-        !showDetailOnMobile ? "hidden lg:flex" : "flex"
-      )}>
-        <Card className="flex-1 flex flex-col overflow-hidden">
-          <CardHeader className="border-b pb-4 px-4 sm:px-6">
-            <div className="flex items-center gap-2 lg:hidden mb-4">
-              <Button variant="ghost" size="sm" onClick={() => setShowDetailOnMobile(false)} className="-ml-2">
-                <ArrowRight className="h-4 w-4 rotate-180 mr-2" /> Назад
-              </Button>
-            </div>
-            <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
-              <div>
-                <CardTitle className="text-xl">{selectedRequest.subject}</CardTitle>
-                <CardDescription className="flex items-center gap-2 mt-1">
-                  <User className="h-3 w-3" /> {selectedRequest.user} • л/с 1294028 • {selectedRequest.address}
-                </CardDescription>
-              </div>
-              <div className="flex gap-2 w-full sm:w-auto">
-                <Button variant="outline" size="sm" className="flex-1 sm:flex-none">Делегировать</Button>
-                <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 flex-1 sm:flex-none">
-                  <CheckCircle2 className="sm:mr-2 h-4 w-4" /> <span className="hidden sm:inline">Закрыть</span>
-                </Button>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="flex-1 overflow-y-auto p-6 space-y-6">
-            <div className="flex gap-4">
-              <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center shrink-0">
-                <User className="h-4 w-4" />
-              </div>
-              <div className="bg-muted/30 p-4 rounded-2xl rounded-tl-none max-w-[80%]">
-                <p className="text-sm leading-relaxed">{selectedRequest.message}</p>
-              </div>
-            </div>
-
-            {aiSuggestion && (
-              <div className="flex flex-col gap-4">
-                <div className="flex gap-4 justify-end">
-                  <div className="bg-primary/10 border border-primary/20 p-4 rounded-2xl rounded-tr-none max-w-[80%]">
-                    <div className="flex items-center gap-2 text-primary mb-2">
-                      <Sparkles className="h-3 w-3" />
-                      <span className="text-[10px] font-bold uppercase tracking-wider">AI Помощник: Протокол</span>
-                    </div>
-                    <div className="text-xs space-y-2 text-primary/80">
-                      <p><strong>Суть:</strong> Расхождение в начислениях ГВС (15м3 вместо 4м3).</p>
-                      <p><strong>Решение:</strong> Проверка показаний и корректировка в след. периоде.</p>
-                      <p><strong>Срок:</strong> 2 рабочих дня.</p>
-                    </div>
-                    <p className="text-sm leading-relaxed mt-3 pt-3 border-t border-primary/20 italic">{aiSuggestion}</p>
-                    <div className="mt-4 flex gap-2">
-                      <Button size="sm" className="h-7 text-[10px]">Отправить как есть</Button>
-                      <Button variant="outline" size="sm" className="h-7 text-[10px]">Редактировать</Button>
-                    </div>
-                  </div>
-                  <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0 text-primary">
-                    <Sparkles className="h-4 w-4" />
-                  </div>
-                </div>
-              </div>
-            )}
           </CardContent>
-          <div className="p-4 sm:p-6 border-t bg-muted/5">
-            <div className="flex gap-2 mb-4">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="text-[10px] h-7 border-primary/30 text-primary"
-                onClick={generateAiReply}
-                disabled={isGenerating}
-              >
-                <Sparkles className={cn("mr-1.5 h-3 w-3", isGenerating && "animate-spin")} />
-                {isGenerating ? "Генерация ответа..." : "Сформировать AI-ответ"}
-              </Button>
+          <div className="p-4 border-t bg-muted/5">
+            <div className="flex gap-2">
+              <Input placeholder="Ответить жителю..." className="bg-background" />
+              <Button size="icon"><Send className="h-4 w-4" /></Button>
             </div>
-            <div className="relative">
-              <textarea 
-                placeholder="Введите ваш ответ или используйте AI-помощника..."
-                className="w-full min-h-[100px] p-4 bg-background border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm resize-none"
-              />
-              <Button size="icon" className="absolute bottom-3 right-3 rounded-full h-8 w-8">
-                <Send className="h-4 w-4" />
-              </Button>
+            <div className="flex gap-4 mt-2 px-1">
+              <button className="text-[10px] text-primary hover:underline flex items-center gap-1">
+                <Sparkles className="h-3 w-3" /> Сгенерировать ответ AI
+              </button>
+              <button className="text-[10px] text-muted-foreground hover:underline">Шаблоны ответов</button>
             </div>
           </div>
         </Card>
