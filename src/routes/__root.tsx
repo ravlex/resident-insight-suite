@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { 
   LayoutDashboard, 
@@ -17,7 +17,9 @@ import {
   Settings,
   Bell,
   Search,
-  User
+  User,
+  Menu,
+  X
 } from "lucide-react";
 
 import appCss from "../styles.css?url";
