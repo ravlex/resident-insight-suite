@@ -35,9 +35,9 @@ function MapPage() {
           </div>
           <p className="font-medium text-slate-500">Здесь отображается интерактивная карта районов</p>
           <div className="mt-4 flex gap-4 text-xs">
-            <div className="flex items-center gap-1"><div className="w-3 h-3 bg-red-500 rounded-full" /> Критически (>100к)</div>
-            <div className="flex items-center gap-1"><div className="w-3 h-3 bg-orange-500 rounded-full" /> Высоко (>50к)</div>
-            <div className="flex items-center gap-1"><div className="w-3 h-3 bg-yellow-500 rounded-full" /> Средне (>10к)</div>
+            <div className="flex items-center gap-1"><div className="w-3 h-3 bg-red-500 rounded-full" /> Критически ({">"}100к)</div>
+            <div className="flex items-center gap-1"><div className="w-3 h-3 bg-orange-500 rounded-full" /> Высоко ({">"}50к)</div>
+            <div className="flex items-center gap-1"><div className="w-3 h-3 bg-yellow-500 rounded-full" /> Средне ({">"}10к)</div>
           </div>
         </div>
         
