@@ -19,7 +19,9 @@ import {
   Search,
   User,
   Menu,
-  X
+  X,
+  Ticket,
+  CheckSquare
 } from "lucide-react";
 
 import appCss from "../styles.css?url";
@@ -186,8 +188,11 @@ function RootComponent() {
             <SidebarItem to="/" icon={LayoutDashboard} onClick={() => setIsSidebarOpen(false)}>Дашборд</SidebarItem>
             <SidebarItem to="/debtors" icon={Users} onClick={() => setIsSidebarOpen(false)}>Должники</SidebarItem>
             <SidebarItem to="/requests" icon={MessageSquare} onClick={() => setIsSidebarOpen(false)}>Обращения</SidebarItem>
+            <SidebarItem to="/tickets" icon={Ticket} onClick={() => setIsSidebarOpen(false)}>Взаимодействие с ИВЦ</SidebarItem>
+            <SidebarItem to="/tasks" icon={CheckSquare} onClick={() => setIsSidebarOpen(false)}>Задачи</SidebarItem>
             <SidebarItem to="/reports" icon={FileText} onClick={() => setIsSidebarOpen(false)}>Отчеты</SidebarItem>
             <div className="pt-4 mt-4 border-t border-border">
+              <SidebarItem to="/notifications" icon={Bell} onClick={() => setIsSidebarOpen(false)}>Уведомления</SidebarItem>
               <SidebarItem to="/settings" icon={Settings} onClick={() => setIsSidebarOpen(false)}>Настройки</SidebarItem>
             </div>
           </nav>
@@ -225,10 +230,10 @@ function RootComponent() {
               </div>
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
-              <button className="relative p-2 rounded-full hover:bg-accent transition-colors">
+              <Link to="/notifications" className="relative p-2 rounded-full hover:bg-accent transition-colors block">
                 <Bell className="h-5 w-5" />
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-background"></span>
-              </button>
+              </Link>
               <button className="p-2 rounded-full hover:bg-accent transition-colors">
                 <User className="h-5 w-5" />
               </button>

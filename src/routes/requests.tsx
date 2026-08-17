@@ -167,20 +167,27 @@ function RequestsPage() {
             </div>
 
             {aiSuggestion && (
-              <div className="flex gap-4 justify-end">
-                <div className="bg-primary/10 border border-primary/20 p-4 rounded-2xl rounded-tr-none max-w-[80%]">
-                  <div className="flex items-center gap-2 text-primary mb-2">
-                    <Sparkles className="h-3 w-3" />
-                    <span className="text-[10px] font-bold uppercase tracking-wider">AI Помощник</span>
+              <div className="flex flex-col gap-4">
+                <div className="flex gap-4 justify-end">
+                  <div className="bg-primary/10 border border-primary/20 p-4 rounded-2xl rounded-tr-none max-w-[80%]">
+                    <div className="flex items-center gap-2 text-primary mb-2">
+                      <Sparkles className="h-3 w-3" />
+                      <span className="text-[10px] font-bold uppercase tracking-wider">AI Помощник: Протокол</span>
+                    </div>
+                    <div className="text-xs space-y-2 text-primary/80">
+                      <p><strong>Суть:</strong> Расхождение в начислениях ГВС (15м3 вместо 4м3).</p>
+                      <p><strong>Решение:</strong> Проверка показаний и корректировка в след. периоде.</p>
+                      <p><strong>Срок:</strong> 2 рабочих дня.</p>
+                    </div>
+                    <p className="text-sm leading-relaxed mt-3 pt-3 border-t border-primary/20 italic">{aiSuggestion}</p>
+                    <div className="mt-4 flex gap-2">
+                      <Button size="sm" className="h-7 text-[10px]">Отправить как есть</Button>
+                      <Button variant="outline" size="sm" className="h-7 text-[10px]">Редактировать</Button>
+                    </div>
                   </div>
-                  <p className="text-sm leading-relaxed">{aiSuggestion}</p>
-                  <div className="mt-4 flex gap-2">
-                    <Button size="sm" className="h-7 text-[10px]">Отправить как есть</Button>
-                    <Button variant="outline" size="sm" className="h-7 text-[10px]">Редактировать</Button>
+                  <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0 text-primary">
+                    <Sparkles className="h-4 w-4" />
                   </div>
-                </div>
-                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0 text-primary">
-                  <Sparkles className="h-4 w-4" />
                 </div>
               </div>
             )}

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -7,7 +7,10 @@ import {
   ArrowUpRight,
   ChevronRight,
   Download,
-  AlertCircle
+  AlertCircle,
+  Sparkles,
+  CheckSquare,
+  Clock
 } from "lucide-react";
 import { 
   BarChart, 
@@ -88,6 +91,21 @@ function MetricCard({ title, value, subtext, trend, trendValue, icon: Icon }: an
 function Index() {
   return (
     <div className="space-y-8">
+      {/* AI Search Bar */}
+      <div className="relative group">
+        <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+          <Sparkles className="h-5 w-5 text-primary animate-pulse" />
+        </div>
+        <input 
+          type="text" 
+          placeholder="Спросите AI об аналитике (например: 'Покажи дома с ростом долга за май')" 
+          className="w-full h-14 pl-12 pr-4 bg-white border-2 border-primary/20 rounded-2xl shadow-sm focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-sm outline-none"
+        />
+        <div className="absolute inset-y-0 right-4 flex items-center">
+          <Button size="sm" className="h-8">Анализировать</Button>
+        </div>
+      </div>
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Обзор показателей</h1>
@@ -306,6 +324,33 @@ function Index() {
               <Button className="w-full text-xs" variant="outline" size="sm">
                 Посмотреть детальный анализ
               </Button>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Активные задачи</CardTitle>
+              <CardDescription>Ближайшие дедлайны</CardDescription>
+            </div>
+            <Button variant="ghost" size="sm" asChild><Link to="/tasks">Все задачи</Link></Button>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {[
+                { title: 'Сверка по Ленина 15', date: 'Сегодня', priority: 'high' },
+                { title: 'Отчет для РСО', date: 'Завтра', priority: 'medium' },
+              ].map((task, i) => (
+                <div key={i} className="flex items-center gap-3 p-3 border rounded-lg">
+                  <CheckSquare className={cn("h-4 w-4", task.priority === 'high' ? "text-red-500" : "text-muted-foreground")} />
+                  <div className="flex-1 overflow-hidden">
+                    <p className="text-sm font-medium truncate">{task.title}</p>
+                    <div className="flex items-center gap-1 text-[10px] text-muted-foreground mt-1">
+                      <Clock className="h-3 w-3" /> {task.date}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
