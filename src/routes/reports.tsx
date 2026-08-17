@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import * as React from "react";
 import { 
-
   FileBarChart, 
   FileText, 
   Download, 
@@ -15,8 +14,15 @@ import {
   Settings,
   Mail,
   Search,
-  ChevronRight
+  ChevronRight,
+  Layers,
+  Archive,
+  CalendarCheck,
+  FileBox,
+  Layout,
+  Plus
 } from "lucide-react";
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -63,10 +69,11 @@ const reportTemplates = [
 ];
 
 const archiveDocuments = [
-  { id: 1, name: 'ОСВ_Июнь_2026.pdf', date: '15.06.2026', size: '2.4 MB', author: 'Иванова А.' },
-  { id: 2, name: 'Реестр_Должников_Май.xlsx', date: '01.06.2026', size: '1.8 MB', author: 'Системный бот' },
-  { id: 3, name: 'Статистика_Услуг_Кв1.pdf', date: '10.04.2026', size: '4.2 MB', author: 'Петров С.' },
+  { id: 1, name: 'ОСВ_Июнь_2026.pdf', date: '15.06.2026', size: '2.4 MB', author: 'Иванова А.', version: 'v2.1' },
+  { id: 2, name: 'Реестр_Должников_Май.xlsx', date: '01.06.2026', size: '1.8 MB', author: 'Системный бот', version: 'v1.0' },
+  { id: 3, name: 'Статистика_Услуг_Кв1.pdf', date: '10.04.2026', size: '4.2 MB', author: 'Петров С.', version: 'v1.4' },
 ];
+
 
 const schedules = [
   { id: 1, name: 'Еженедельный реестр оплат', period: 'Каждый понедельник', email: 'fin@uk-teplo.ru', status: 'active' },
@@ -79,6 +86,8 @@ function ReportsPage() {
   const [selectedTemplate, setSelectedTemplate] = React.useState(firstTemplate.id);
   const [isGenerating, setIsGenerating] = React.useState(false);
   const [lastReport, setLastReport] = React.useState<string | null>(null);
+  const [constructorStep, setConstructorStep] = React.useState(1);
+
 
 
   const handleGenerate = () => {
@@ -147,50 +156,147 @@ function ReportsPage() {
 
             <div className="lg:col-span-3 space-y-6">
               <Card>
-                <CardHeader>
-                  <CardTitle>Параметры формирования</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Период</label>
-                      <Select defaultValue="june2026">
-                        <SelectTrigger><SelectValue placeholder="Месяц" /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="june2026">Июнь 2026</SelectItem>
-                          <SelectItem value="may2026">Май 2026</SelectItem>
-                        </SelectContent>
-                      </Select>
+                <CardHeader className="border-b bg-slate-50/50">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle>Конструктор отчета: {reportTemplates.find(t => t.id === selectedTemplate)?.title}</CardTitle>
+                      <CardDescription>Шаг {constructorStep} из 3: {constructorStep === 1 ? 'Параметры и фильтры' : constructorStep === 2 ? 'Группировка и поля' : 'Формат и экспорт'}</CardDescription>
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Дома</label>
-                      <Select defaultValue="all">
-                        <SelectTrigger><SelectValue placeholder="Все дома" /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">Все объекты</SelectItem>
-                          <SelectItem value="l15">ул. Ленина 15</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Формат</label>
-                      <Select defaultValue="pdf">
-                        <SelectTrigger><SelectValue placeholder="PDF" /></SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="pdf">PDF Документ</SelectItem>
-                          <SelectItem value="xlsx">Excel Таблица</SelectItem>
-                        </SelectContent>
-                      </Select>
+                    <div className="flex gap-1">
+                      {[1, 2, 3].map(i => (
+                        <div key={i} className={`h-1.5 w-8 rounded-full ${i <= constructorStep ? 'bg-primary' : 'bg-slate-200'}`} />
+                      ))}
                     </div>
                   </div>
-                  <div className="pt-4 border-t flex justify-end">
-                    <Button onClick={handleGenerate} disabled={isGenerating}>
-                      {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
-                      {isGenerating ? "Обработка..." : "Сформировать"}
+                </CardHeader>
+                <CardContent className="pt-6 space-y-6">
+                  {constructorStep === 1 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 animate-in fade-in slide-in-from-right-2 duration-300">
+                      <div className="space-y-2">
+                        <label className="text-sm font-semibold text-slate-700">Расчетный период</label>
+                        <Select defaultValue="june2026">
+                          <SelectTrigger className="h-11"><SelectValue placeholder="Выберите месяц" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="june2026">Июнь 2026</SelectItem>
+                            <SelectItem value="may2026">Май 2026</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-semibold text-slate-700">Объекты фонда</label>
+                        <Select defaultValue="all">
+                          <SelectTrigger className="h-11"><SelectValue placeholder="Все дома" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">Все объекты (12)</SelectItem>
+                            <SelectItem value="l15">ул. Ленина, д. 15</SelectItem>
+                            <SelectItem value="m4">ул. Мира, д. 4</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2 sm:col-span-2">
+                        <label className="text-sm font-semibold text-slate-700">Дополнительные фильтры</label>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                          {['По услугам', 'По долгу > 3 мес', 'Только перерасчеты', 'С активными счетчиками'].map(f => (
+                            <Badge key={f} variant="outline" className="py-2 justify-center cursor-pointer hover:bg-slate-50 transition-colors">
+                              <Plus className="h-3 w-3 mr-1" /> {f}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {constructorStep === 2 && (
+                    <div className="space-y-6 animate-in fade-in slide-in-from-right-2 duration-300">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <label className="text-sm font-semibold text-slate-700">Группировка данных</label>
+                          <Select defaultValue="house">
+                            <SelectTrigger className="h-11"><SelectValue placeholder="Группировать по..." /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="house">По домам</SelectItem>
+                              <SelectItem value="service">По услугам</SelectItem>
+                              <SelectItem value="flat">По квартирам</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-sm font-semibold text-slate-700">Сортировка</label>
+                          <Select defaultValue="desc">
+                            <SelectTrigger className="h-11"><SelectValue placeholder="Порядок..." /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="desc">По убыванию суммы</SelectItem>
+                              <SelectItem value="asc">По возрастанию суммы</SelectItem>
+                              <SelectItem value="addr">По адресу</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-sm font-semibold text-slate-700 text-center block">Выберите поля для отображения</label>
+                        <div className="flex flex-wrap gap-2 justify-center">
+                          {['Лицевой счет', 'ФИО', 'Адрес', 'Начислено', 'Пени', 'Оплачено', 'Сальдо на начало', 'Сальдо на конец'].map(p => (
+                            <Badge key={p} className="py-2 px-4 cursor-pointer hover:bg-primary transition-all bg-primary/10 text-primary border-primary/20">
+                              {p}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {constructorStep === 3 && (
+                    <div className="space-y-6 animate-in fade-in slide-in-from-right-2 duration-300">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        {[
+                          { label: 'PDF', icon: FileText, desc: 'Печатная форма' },
+                          { label: 'Excel (XLSX)', icon: FileBarChart, desc: 'Для аналитики' },
+                          { label: 'Word (DOCX)', icon: FileBox, desc: 'Для справок' },
+                          { label: 'Архив (ZIP)', icon: Archive, desc: 'Пакетная выгрузка' },
+                        ].map((f) => (
+                          <div key={f.label} className="flex flex-col items-center p-4 border-2 rounded-xl hover:border-primary cursor-pointer transition-all bg-white hover:shadow-md">
+                            <div className="p-3 bg-slate-50 rounded-lg mb-2">
+                              <f.icon className="h-6 w-6 text-slate-700" />
+                            </div>
+                            <span className="text-xs font-bold">{f.label}</span>
+                            <span className="text-[9px] text-muted-foreground mt-1">{f.desc}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="p-4 bg-blue-50/50 rounded-xl border border-blue-100 flex items-center gap-4">
+                        <CalendarCheck className="h-6 w-6 text-blue-600" />
+                        <div>
+                          <p className="text-sm font-semibold text-blue-900">Регулярный отчет?</p>
+                          <p className="text-[10px] text-blue-700">Вы можете сохранить этот шаблон и настроить его автоматическую генерацию в разделе "Расписание".</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="pt-6 border-t flex items-center justify-between">
+                    <Button 
+                      variant="ghost" 
+                      onClick={() => setConstructorStep(s => Math.max(1, s - 1))}
+                      disabled={constructorStep === 1 || isGenerating}
+                    >
+                      Назад
                     </Button>
+                    <div className="flex gap-2">
+                      {constructorStep < 3 ? (
+                        <Button onClick={() => setConstructorStep(s => Math.min(3, s + 1))}>
+                          Далее <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      ) : (
+                        <Button onClick={handleGenerate} disabled={isGenerating}>
+                          {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
+                          {isGenerating ? "Формирование..." : "Сформировать отчет"}
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
+
 
               {lastReport && (
                 <Card className="border-emerald-200 bg-emerald-50/30 p-4 flex items-center justify-between">
@@ -229,9 +335,13 @@ function ReportsPage() {
                         <FileText className="h-5 w-5" />
                       </div>
                       <div>
-                        <p className="font-medium text-sm">{doc.name}</p>
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium text-sm">{doc.name}</p>
+                          <Badge variant="outline" className="text-[8px] py-0">{doc.version}</Badge>
+                        </div>
                         <p className="text-xs text-muted-foreground">{doc.date} • {doc.size} • Автор: {doc.author}</p>
                       </div>
+
                     </div>
                     <div className="flex gap-2">
                       <Button variant="ghost" size="sm"><History className="h-4 w-4" /></Button>

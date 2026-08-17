@@ -156,6 +156,15 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      alert(`Поиск по запросу: "${searchQuery}"\nПоиск осуществляется по л/с, адресам и номерам заявок.`);
+    }
+  };
+
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -220,14 +229,17 @@ function RootComponent() {
               >
                 <Menu className="h-5 w-5" />
               </button>
-              <div className="relative w-full max-w-md hidden sm:block">
+              <form onSubmit={handleSearch} className="relative w-full max-w-md hidden sm:block">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <input
                   type="search"
-                  placeholder="Поиск..."
+                  placeholder="Поиск по л/с, адресу или ID..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full bg-background border rounded-md pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
-              </div>
+              </form>
+
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
               <Link to="/notifications" className="relative p-2 rounded-full hover:bg-accent transition-colors block">

@@ -12,8 +12,12 @@ import {
   AlertCircle,
   Sparkles,
   CheckSquare,
-  Clock
+  Clock,
+  Layers,
+  Map as MapIcon,
+  Filter as FilterIcon
 } from "lucide-react";
+
 import { 
   BarChart, 
   Bar, 
@@ -92,6 +96,9 @@ function MetricCard({ title, value, subtext, trend, trendValue, icon: Icon }: an
 }
 
 function Index() {
+  const [selectedService, setSelectedService] = React.useState("all");
+
+
   return (
     <div className="space-y-8">
       {/* AI Search Bar */}
@@ -123,6 +130,33 @@ function Index() {
           <Button size="sm" className="flex-1 sm:flex-none">Сформировать отчет</Button>
         </div>
       </div>
+
+      {/* Service Filter & Benchmark Toggle */}
+      <div className="flex flex-wrap items-center gap-4 bg-white p-4 rounded-xl border-2 border-slate-100">
+        <div className="flex items-center gap-2">
+          <FilterIcon className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm font-medium">Фильтр по услугам:</span>
+        </div>
+        <div className="flex gap-2">
+          {["all", "gvs", "hvs", "electro"].map((s) => (
+            <Button 
+              key={s}
+              variant={selectedService === s ? "default" : "outline"} 
+              size="sm"
+              onClick={() => setSelectedService(s)}
+              className="h-8 text-xs"
+            >
+              {s === "all" ? "Все услуги" : s === "gvs" ? "ГВС" : s === "hvs" ? "ХВС" : "Электро"}
+            </Button>
+          ))}
+        </div>
+        <div className="ml-auto hidden md:flex items-center gap-2 px-3 py-1 bg-slate-50 rounded-lg border">
+          <Layers className="h-4 w-4 text-primary" />
+          <span className="text-[10px] font-bold uppercase text-slate-500">Benchmark ИВЦ:</span>
+          <Badge variant="outline" className="bg-white text-emerald-600 border-emerald-100">Активен</Badge>
+        </div>
+      </div>
+
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <MetricCard 
@@ -159,12 +193,23 @@ function Index() {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="col-span-1">
-          <CardHeader>
-            <CardTitle>Динамика сборов vs Рынок</CardTitle>
-            <CardDescription>Сравнение собираемости нашей УК со средним значением по ИВЦ</CardDescription>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="lg:col-span-2">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Динамика сборов vs Рынок</CardTitle>
+              <CardDescription>Сравнение собираемости нашей УК со средним значением по ИВЦ (Benchmark)</CardDescription>
+            </div>
+            <div className="flex gap-2">
+              <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                <div className="w-2 h-2 rounded-full bg-primary" /> Наша УК
+              </div>
+              <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                <div className="w-2 h-2 rounded-full bg-slate-300" /> Рынок
+              </div>
+            </div>
           </CardHeader>
+
           <CardContent className="h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={collectionData}>
@@ -182,7 +227,8 @@ function Index() {
           </CardContent>
         </Card>
 
-        <Card className="col-span-1">
+        <Card className="lg:col-span-1">
+
           <CardHeader>
             <CardTitle>География обращений</CardTitle>
             <CardDescription>Концентрация жалоб по домам (топ 5)</CardDescription>
@@ -272,8 +318,44 @@ function Index() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <Card className="lg:col-span-1">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-medium">Календарь оплат</CardTitle>
+              <Clock className="h-4 w-4 text-muted-foreground" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {[
+                { day: '15', status: 'fact', amount: '420k', label: 'Сегодня' },
+                { day: '16', status: 'forecast', amount: '380k', label: 'Завтра' },
+                { day: '17', status: 'forecast', amount: '510k', label: 'Ср' },
+                { day: '18', status: 'forecast', amount: '290k', label: 'Чт' },
+              ].map((d, i) => (
+                <div key={i} className="flex items-center justify-between p-2 rounded-lg border-l-4 border-l-primary bg-slate-50">
+                  <div className="flex items-center gap-3">
+                    <div className="text-lg font-bold text-slate-700">{d.day}</div>
+                    <div>
+                      <p className="text-[10px] font-medium text-slate-500">{d.label}</p>
+                      <p className="text-xs font-bold text-slate-900">{d.amount} ₽</p>
+                    </div>
+                  </div>
+                  <Badge variant={d.status === 'fact' ? 'default' : 'outline'} className="text-[8px] h-4">
+                    {d.status === 'fact' ? 'Факт' : 'Прогноз'}
+                  </Badge>
+                </div>
+              ))}
+              <Button variant="ghost" className="w-full text-xs h-8" size="sm">
+                Весь календарь <ChevronRight className="ml-1 h-3 w-3" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
         <Card className="lg:col-span-2">
+
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
               <CardTitle>Последние обращения</CardTitle>
@@ -309,7 +391,8 @@ function Index() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="lg:col-span-1">
+
           <CardHeader>
             <CardTitle>AI-Инсайт</CardTitle>
             <CardDescription>Умный помощник проанализировал данные</CardDescription>
@@ -330,7 +413,8 @@ function Index() {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="lg:col-span-1">
+
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
               <CardTitle>Активные задачи</CardTitle>

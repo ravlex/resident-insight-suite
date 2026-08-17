@@ -11,8 +11,12 @@ import {
   CheckCircle2,
   AlertCircle,
   ArrowRight,
-  Inbox
+  Inbox,
+  UserCheck,
+  History,
+  Timer
 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -31,7 +35,7 @@ const mockTickets = [
   { 
     id: 'T-2026-042', 
     subject: 'Сверка начислений за июнь', 
-    status: 'new', 
+    status: 'registered', // черновик, sent, registered, process, info, resolved, closed
     priority: 'high',
     category: 'Бухгалтерия',
     object: 'ул. Ленина, д. 15',
@@ -42,6 +46,19 @@ const mockTickets = [
       { sender: 'УК', text: 'Добрый день, прошу провести сверку по л/с 1294028. Есть расхождения в ГВС.' }
     ]
   },
+  { 
+    id: 'T-2026-039', 
+    subject: 'Корректировка сальдо по ГВС', 
+    status: 'draft', 
+    priority: 'medium',
+    category: 'Бухгалтерия',
+    object: 'ул. Мира, д. 4',
+    time: '30 мин назад',
+    deadline: '20.06.2026',
+    initiator: 'Иванова А. (УК)',
+    messages: []
+  },
+
   { 
     id: 'T-2026-038', 
     subject: 'Обновление данных по приборам учета', 
@@ -81,21 +98,30 @@ function TicketsPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'new': return 'bg-blue-500';
-      case 'process': return 'bg-orange-500';
-      case 'closed': return 'bg-emerald-500';
-      default: return 'bg-slate-500';
+      case 'draft': return 'bg-slate-300 text-slate-700';
+      case 'sent': return 'bg-blue-100 text-blue-700';
+      case 'registered': return 'bg-blue-500 text-white';
+      case 'process': return 'bg-orange-500 text-white';
+      case 'info': return 'bg-purple-500 text-white';
+      case 'resolved': return 'bg-emerald-100 text-emerald-700';
+      case 'closed': return 'bg-emerald-500 text-white';
+      default: return 'bg-slate-500 text-white';
     }
   };
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'new': return 'Новый';
+      case 'draft': return 'Черновик';
+      case 'sent': return 'Отправлен';
+      case 'registered': return 'Зарегистрирован';
       case 'process': return 'В работе';
+      case 'info': return 'Ожидается инфо';
+      case 'resolved': return 'Ответ предоставлен';
       case 'closed': return 'Закрыт';
       default: return status;
     }
   };
+
 
   return (
     <div className="space-y-6">
@@ -163,11 +189,22 @@ function TicketsPage() {
                 Объект: {selectedTicket.object} • Дедлайн: {selectedTicket.deadline}
               </CardDescription>
             </div>
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm">Решение</Button>
-              <Badge className={cn(getStatusColor(selectedTicket.status))}>{getStatusText(selectedTicket.status)}</Badge>
+            <div className="flex items-center gap-4">
+              <div className="hidden md:flex flex-col items-end border-r pr-4">
+                <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500">
+                  <UserCheck className="h-3 w-3 text-emerald-500" /> Менеджер: Алексей К.
+                </div>
+                <div className="text-[9px] text-emerald-600 flex items-center gap-1">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> На связи
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="sm"><History className="h-4 w-4 mr-2" /> История</Button>
+                <Badge className={cn(getStatusColor(selectedTicket.status))}>{getStatusText(selectedTicket.status)}</Badge>
+              </div>
             </div>
           </CardHeader>
+
           <CardContent className="flex-1 overflow-y-auto p-6 space-y-4">
             <div className="flex flex-col items-center mb-6">
               <div className="px-3 py-1 bg-muted rounded-full text-[10px] text-muted-foreground">
