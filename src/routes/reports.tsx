@@ -239,7 +239,14 @@ function ReportsPage() {
                         <label className="text-sm font-semibold text-slate-700 text-center block">Выберите поля для отображения</label>
                         <div className="flex flex-wrap gap-2 justify-center">
                           {['Лицевой счет', 'ФИО', 'Адрес', 'Начислено', 'Пени', 'Оплачено', 'Сальдо на начало', 'Сальдо на конец'].map(p => (
-                            <Badge key={p} className="py-2 px-4 cursor-pointer hover:bg-primary transition-all bg-primary/10 text-primary border-primary/20">
+                            <Badge 
+                              key={p} 
+                              className={`py-2 px-4 cursor-pointer transition-all border ${
+                                p === 'Адрес' // For demo: simulate selected state for the one in the middle of screenshot
+                                  ? 'bg-[#0F172A] text-white border-[#0F172A] hover:bg-[#1e293b]' 
+                                  : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-[#0F172A] hover:text-white hover:border-[#0F172A]'
+                              }`}
+                            >
                               {p}
                             </Badge>
                           ))}
