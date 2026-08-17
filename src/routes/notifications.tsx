@@ -32,7 +32,10 @@ function NotificationsPage() {
             <div>
               <p className="font-semibold">{n.title}</p>
               <p className="text-sm text-muted-foreground">{n.text}</p>
-              <span className="text-[10px] text-muted-foreground mt-2 block">{n.time}</span>
+              <div className="flex items-center gap-1 mt-2">
+                <Clock className="h-3 w-3 text-muted-foreground" />
+                <span className="text-[10px] text-muted-foreground">{n.time}</span>
+              </div>
             </div>
           </CardContent>
         </Card>

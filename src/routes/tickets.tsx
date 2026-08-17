@@ -52,7 +52,7 @@ const mockTickets = [
 
 function TicketsPage() {
   const [selectedId, setSelectedId] = useState('T-2026-042');
-  const selectedTicket = mockTickets.find(t => t.id === selectedId) || mockTickets[0];
+  const selectedTicket = mockTickets.find(t => t.id === selectedId) || mockTickets[0]!;
 
   return (
     <div className="flex flex-col lg:flex-row h-[calc(100vh-160px)] gap-6 overflow-hidden">
