@@ -137,10 +137,11 @@ function ReportsPage() {
                             ? 'bg-[#0F172A] text-white shadow-md' 
                             : 'bg-slate-50 text-slate-500'
                         }`}>
-                          <template.icon className="h-5 w-5 block" />
+                          <template.icon className="h-5 w-5" />
                         </div>
 
                         <div className="flex-1 overflow-hidden">
+
                           <p className={`text-sm font-semibold truncate ${
                             selectedTemplate === template.id ? 'text-[#0F172A]' : 'text-slate-700'
                           }`}>
