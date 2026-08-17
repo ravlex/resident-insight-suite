@@ -131,14 +131,15 @@ function ReportsPage() {
                           : 'bg-white border-slate-200 hover:border-slate-300'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
-                        <div className={`p-2.5 rounded-lg flex items-center justify-center transition-colors ${
+                      <div className="flex items-center gap-3 w-full">
+                        <div className={`p-2.5 rounded-lg flex items-center justify-center transition-colors shrink-0 ${
                           selectedTemplate === template.id 
                             ? 'bg-[#0F172A] text-white shadow-md' 
                             : 'bg-slate-50 text-slate-500'
                         }`}>
-                          <template.icon className="h-5 w-5" />
+                          <template.icon className="h-5 w-5 block" />
                         </div>
+
                         <div className="flex-1 overflow-hidden">
                           <p className={`text-sm font-semibold truncate ${
                             selectedTemplate === template.id ? 'text-[#0F172A]' : 'text-slate-700'
