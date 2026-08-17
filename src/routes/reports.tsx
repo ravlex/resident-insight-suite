@@ -324,7 +324,12 @@ function ReportsPage() {
                   <Button 
                     className="bg-emerald-600 hover:bg-emerald-700"
                     onClick={() => {
-                      alert("Файл скачивается...");
+                      const link = document.createElement('a');
+                      link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent('Demo Report Content');
+                      link.download = 'report_demo.txt';
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
                       setLastReport(null);
                     }}
                   >
