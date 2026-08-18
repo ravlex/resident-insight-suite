@@ -26,18 +26,49 @@ function MapPage() {
         </Button>
       </div>
 
-      <Card className="w-full aspect-video bg-slate-50 relative overflow-hidden flex items-center justify-center border-2 border-dashed">
-        <div className="text-center">
-          <div className="flex gap-4 justify-center mb-4">
-            <div className="w-20 h-20 bg-red-500/20 rounded-full animate-ping" />
-            <div className="w-16 h-16 bg-orange-500/20 rounded-full animate-bounce mt-8" />
-            <div className="w-24 h-24 bg-red-600/20 rounded-full animate-pulse" />
+      <Card className="w-full aspect-video bg-[#f8fafc] relative overflow-hidden flex items-center justify-center border-none shadow-inner group">
+        {/* Mock Map Background */}
+        <div className="absolute inset-0 opacity-40 bg-[url('https://api.mapbox.com/styles/v1/mapbox/light-v10/static/37.6173,55.7558,11,0/1000x600?access_token=pk.eyJ1IjoiYm90LWxvdmFibGUiLCJhIjoiY202eWJqZzd3MGNiejJtc2J2c3J4ZDJ6eSJ9.dummy')] bg-cover bg-center transition-transform duration-[20s] hover:scale-110" />
+        
+        {/* Interactive Heatmap Points */}
+        <div className="relative w-full h-full">
+          <div className="absolute top-1/4 left-1/3 group/point cursor-pointer">
+            <div className="w-12 h-12 bg-red-500/30 rounded-full animate-ping absolute -inset-3" />
+            <div className="w-6 h-6 bg-red-600 rounded-full border-2 border-white shadow-lg relative z-10 transition-transform group-hover/point:scale-125" />
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover/point:opacity-100 transition-opacity whitespace-nowrap z-20 shadow-xl">
+              Ленина, 42: 1.2 млн ₽
+            </div>
           </div>
-          <p className="font-medium text-slate-500">Здесь отображается интерактивная карта районов</p>
-          <div className="mt-4 flex gap-4 text-xs">
-            <div className="flex items-center gap-1"><div className="w-3 h-3 bg-red-500 rounded-full" /> Критически ({">"}100к)</div>
-            <div className="flex items-center gap-1"><div className="w-3 h-3 bg-orange-500 rounded-full" /> Высоко ({">"}50к)</div>
-            <div className="flex items-center gap-1"><div className="w-3 h-3 bg-yellow-500 rounded-full" /> Средне ({">"}10к)</div>
+
+          <div className="absolute top-1/2 left-2/3 group/point cursor-pointer">
+            <div className="w-10 h-10 bg-orange-500/30 rounded-full animate-ping absolute -inset-2" />
+            <div className="w-5 h-5 bg-orange-500 rounded-full border-2 border-white shadow-lg relative z-10 transition-transform group-hover/point:scale-125" />
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover/point:opacity-100 transition-opacity whitespace-nowrap z-20 shadow-xl">
+              Мира, 15: 450к ₽
+            </div>
+          </div>
+
+          <div className="absolute top-2/3 left-1/4 group/point cursor-pointer">
+            <div className="w-8 h-8 bg-yellow-400/30 rounded-full animate-ping absolute -inset-1" />
+            <div className="w-4 h-4 bg-yellow-400 rounded-full border-2 border-white shadow-lg relative z-10 transition-transform group-hover/point:scale-125" />
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover/point:opacity-100 transition-opacity whitespace-nowrap z-20 shadow-xl">
+              Гагарина, 8: 120к ₽
+            </div>
+          </div>
+
+          {/* Map Overlay Controls */}
+          <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-md p-4 rounded-xl shadow-xl border border-slate-200 z-10">
+            <h4 className="text-sm font-bold mb-2">Легенда карты</h4>
+            <div className="space-y-2 text-[11px]">
+              <div className="flex items-center gap-2"><div className="w-3 h-3 bg-red-600 rounded-full" /> Критически ({">"}1 млн ₽)</div>
+              <div className="flex items-center gap-2"><div className="w-3 h-3 bg-orange-500 rounded-full" /> Высоко (500к - 1 млн ₽)</div>
+              <div className="flex items-center gap-2"><div className="w-3 h-3 bg-yellow-400 rounded-full" /> Средне (100к - 500к ₽)</div>
+            </div>
+          </div>
+
+          <div className="absolute top-6 right-6 flex flex-col gap-2 z-10">
+            <button className="bg-white/90 backdrop-blur-md w-8 h-8 rounded-lg shadow-lg border border-slate-200 flex items-center justify-center hover:bg-white transition-colors">+</button>
+            <button className="bg-white/90 backdrop-blur-md w-8 h-8 rounded-lg shadow-lg border border-slate-200 flex items-center justify-center hover:bg-white transition-colors">-</button>
           </div>
         </div>
         
