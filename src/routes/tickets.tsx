@@ -95,6 +95,9 @@ function TicketsPage() {
   const [selectedId, setSelectedId] = React.useState('T-2026-042');
   const [tickets, setTickets] = React.useState(mockTickets);
   const [replyText, setReplyText] = React.useState("");
+  const [isNewTicketOpen, setIsNewTicketOpen] = React.useState(false);
+  const [newSubject, setNewSubject] = React.useState("");
+  const [newCategory, setNewCategory] = React.useState("Бухгалтерия");
 
   const selectedTicket = tickets.find(t => t.id === selectedId) || tickets[0]!;
 
@@ -103,10 +106,11 @@ function TicketsPage() {
     
     const newTickets = tickets.map(t => {
       if (t.id === selectedId) {
+        const updatedMessages = [...t.messages, { sender: 'УК', text: replyText }];
         return {
           ...t,
           status: 'process',
-          messages: [...t.messages, { sender: 'УК', text: replyText }]
+          messages: updatedMessages
         };
       }
       return t;
@@ -114,6 +118,43 @@ function TicketsPage() {
     
     setTickets(newTickets);
     setReplyText("");
+
+    // Simulate AI response for demo
+    setTimeout(() => {
+      setTickets(prev => prev.map(t => {
+        if (t.id === selectedId) {
+          return {
+            ...t,
+            status: 'info',
+            messages: [...t.messages, { sender: 'ИВЦ', text: "Ваше сообщение получено. Менеджер ответит вам в ближайшее время." }]
+          };
+        }
+        return t;
+      }));
+    }, 1500);
+  };
+
+  const createNewTicket = () => {
+    if (!newSubject.trim()) return;
+    
+    const newId = `T-2026-${Math.floor(Math.random() * 900) + 100}`;
+    const newTicket = {
+      id: newId,
+      subject: newSubject,
+      status: 'registered',
+      priority: 'medium',
+      category: newCategory,
+      object: 'ул. Ленина, д. 15',
+      time: 'Только что',
+      deadline: '25.06.2026',
+      initiator: 'Иванова А. (УК)',
+      messages: []
+    };
+    
+    setTickets([newTicket, ...tickets]);
+    setSelectedId(newId);
+    setNewSubject("");
+    setIsNewTicketOpen(false);
   };
 
 
