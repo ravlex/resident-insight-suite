@@ -28,7 +28,25 @@ function MapPage() {
 
       <Card className="w-full aspect-video bg-[#f8fafc] relative overflow-hidden flex items-center justify-center border-none shadow-inner group">
         {/* Mock Map Background */}
-        <div className="absolute inset-0 bg-[#e5e7eb] bg-[url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-40 transition-transform duration-[40s] hover:scale-105" />
+        <div className="absolute inset-0 bg-[#f1f3f5] overflow-hidden">
+          <svg className="w-full h-full text-slate-200" viewBox="0 0 800 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* Simple schematic city layout (Volgograd-like long strip) */}
+            <path d="M150 50 L200 80 L180 150 L120 120 Z" fill="currentColor" />
+            <path d="M300 100 L400 150 L380 250 L280 200 Z" fill="currentColor" />
+            <path d="M450 200 L550 250 L530 350 L430 300 Z" fill="currentColor" />
+            <path d="M500 350 L600 400 L580 480 L480 430 Z" fill="currentColor" />
+            <path d="M100 200 L150 230 L130 300 L80 270 Z" fill="currentColor" />
+            
+            {/* Roads */}
+            <path d="M0 100 Q 400 250 800 450" stroke="#e2e8f0" strokeWidth="12" />
+            <path d="M0 150 Q 400 300 800 500" stroke="#e2e8f0" strokeWidth="8" />
+            <path d="M200 0 L600 500" stroke="#e2e8f0" strokeWidth="4" />
+            
+            {/* River (Volga) */}
+            <path d="M650 0 C 700 150 750 350 800 500 L 800 0 Z" fill="#e0f2fe" />
+            <path d="M650 0 C 700 150 750 350 800 500" stroke="#bae6fd" strokeWidth="4" />
+          </svg>
+        </div>
         <div className="absolute inset-0 bg-white/10" />
 
 
