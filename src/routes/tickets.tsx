@@ -21,6 +21,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 
@@ -95,6 +112,9 @@ function TicketsPage() {
   const [selectedId, setSelectedId] = React.useState('T-2026-042');
   const [tickets, setTickets] = React.useState(mockTickets);
   const [replyText, setReplyText] = React.useState("");
+  const [isNewTicketOpen, setIsNewTicketOpen] = React.useState(false);
+  const [newSubject, setNewSubject] = React.useState("");
+  const [newCategory, setNewCategory] = React.useState("Бухгалтерия");
 
   const selectedTicket = tickets.find(t => t.id === selectedId) || tickets[0]!;
 
@@ -103,10 +123,11 @@ function TicketsPage() {
     
     const newTickets = tickets.map(t => {
       if (t.id === selectedId) {
+        const updatedMessages = [...t.messages, { sender: 'УК', text: replyText }];
         return {
           ...t,
           status: 'process',
-          messages: [...t.messages, { sender: 'УК', text: replyText }]
+          messages: updatedMessages
         };
       }
       return t;
@@ -114,6 +135,43 @@ function TicketsPage() {
     
     setTickets(newTickets);
     setReplyText("");
+
+    // Simulate AI response for demo
+    setTimeout(() => {
+      setTickets(prev => prev.map(t => {
+        if (t.id === selectedId) {
+          return {
+            ...t,
+            status: 'info',
+            messages: [...t.messages, { sender: 'ИВЦ', text: "Ваше сообщение получено. Менеджер ответит вам в ближайшее время." }]
+          };
+        }
+        return t;
+      }));
+    }, 1500);
+  };
+
+  const createNewTicket = () => {
+    if (!newSubject.trim()) return;
+    
+    const newId = `T-2026-${Math.floor(Math.random() * 900) + 100}`;
+    const newTicket = {
+      id: newId,
+      subject: newSubject,
+      status: 'registered',
+      priority: 'medium',
+      category: newCategory,
+      object: 'ул. Ленина, д. 15',
+      time: 'Только что',
+      deadline: '25.06.2026',
+      initiator: 'Иванова А. (УК)',
+      messages: []
+    };
+    
+    setTickets([newTicket, ...tickets]);
+    setSelectedId(newId);
+    setNewSubject("");
+    setIsNewTicketOpen(false);
   };
 
 
@@ -165,7 +223,48 @@ function TicketsPage() {
         <div className="w-full lg:w-1/3 flex flex-col gap-4 overflow-hidden">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold text-lg">Запросы в ИВЦ</h2>
-            <Button size="sm">Новый запрос</Button>
+            <Dialog open={isNewTicketOpen} onOpenChange={setIsNewTicketOpen}>
+              <DialogTrigger asChild>
+                <Button size="sm">Новый запрос</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Создать новый запрос в ИВЦ</DialogTitle>
+                  <DialogDescription>
+                    Опишите проблему или тему для обсуждения. Менеджер ответит в течение рабочего дня.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="subject">Тема запроса</Label>
+                    <Input 
+                      id="subject" 
+                      placeholder="Например: Сверка по дому Ленина 15" 
+                      value={newSubject}
+                      onChange={(e) => setNewSubject(e.target.value)}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="category">Категория</Label>
+                    <Select value={newCategory} onValueChange={setNewCategory}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите категорию" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Бухгалтерия">Бухгалтерия</SelectItem>
+                        <SelectItem value="Приборы учета">Приборы учета</SelectItem>
+                        <SelectItem value="ИТ">ИТ</SelectItem>
+                        <SelectItem value="Юридический отдел">Юридический отдел</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setIsNewTicketOpen(false)}>Отмена</Button>
+                  <Button onClick={createNewTicket}>Создать запрос</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
           <div className="relative">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
