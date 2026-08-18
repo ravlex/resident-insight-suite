@@ -206,19 +206,25 @@ function DebtorsPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => alert('Формирование уведомления PDF для ' + debtor.account)}>
+                        <DropdownMenuItem onClick={() => simulateAction('pdf', debtor.account)}>
                           <FileText className="mr-2 h-4 w-4" /> Сформировать уведомление (PDF)
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => simulateAction('email', debtor.account)}>
                           <Mail className="mr-2 h-4 w-4" /> Отправить на Email / в ЛК
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => alert('Настройка автообзвона для ' + debtor.account)}>
+                        <DropdownMenuItem onClick={() => simulateAction('phone', debtor.account)}>
                           <Phone className="mr-2 h-4 w-4" /> Позвонить (автообзвон)
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => alert('Настройка массовой рассылки для ' + debtor.account)}>
+                        <DropdownMenuItem onClick={() => simulateAction('email', debtor.account)}>
                           <Mail className="mr-2 h-4 w-4" /> Отправить Email / SMS
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="text-red-600">
+                        <DropdownMenuItem 
+                          className="text-red-600" 
+                          onClick={() => {
+                            handleStatusChange(debtor.id, 'court');
+                            simulateAction('court', debtor.account);
+                          }}
+                        >
                           <AlertCircle className="mr-2 h-4 w-4" /> Передать в суд
                         </DropdownMenuItem>
                       </DropdownMenuContent>
