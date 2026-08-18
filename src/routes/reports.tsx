@@ -133,12 +133,12 @@ function ReportsPage() {
                     >
 
                       <div className="flex items-center gap-3 w-full">
-                        <div className={`p-2.5 rounded-lg flex items-center justify-center transition-colors shrink-0 ${
+                        <div className={`p-2.5 rounded-lg flex items-center justify-center transition-colors shrink-0 z-10 ${
                           selectedTemplate === template.id 
-                            ? 'bg-white/10 text-white shadow-sm border border-white/20' 
-                            : 'bg-slate-50 text-slate-500 group-hover:bg-slate-100 group-hover:text-slate-600'
+                            ? 'bg-white/20 text-white shadow-sm border border-white/30' 
+                            : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-700'
                         }`}>
-                          <template.icon className="h-5 w-5" />
+                          <template.icon className="h-5 w-5 relative" />
                         </div>
 
                         <div className="flex-1 overflow-hidden">
