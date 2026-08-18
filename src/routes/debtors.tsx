@@ -49,6 +49,28 @@ const mockDebtors = [
 
 function DebtorsPage() {
   const [searchTerm, setSearchTerm] = React.useState("");
+  const [debtors, setDebtors] = React.useState(mockDebtors);
+
+  const filteredDebtors = debtors.filter(d => 
+    d.account.includes(searchTerm) || 
+    d.owner.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    d.address.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleStatusChange = (id: string, newStatus: string) => {
+    setDebtors(prev => prev.map(d => d.id === id ? { ...d, status: newStatus } : d));
+  };
+
+  const simulateAction = (action: string, account: string) => {
+    // В реальном приложении здесь был бы вызов API
+    const messages: Record<string, string> = {
+      'pdf': `Уведомление в формате PDF для счета ${account} успешно сформировано и готово к печати.`,
+      'email': `Уведомление для счета ${account} отправлено на электронную почту и в личный кабинет жителя.`,
+      'phone': `Запрос на автоматический обзвон для счета ${account} поставлен в очередь. Система совершит звонок в ближайшее время.`,
+      'court': `Дело по счету ${account} подготовлено для передачи в юридический отдел. Статус изменен на "Судебный приказ".`
+    };
+    alert(messages[action] || 'Действие выполнено');
+  };
 
 
   return (
@@ -150,7 +172,7 @@ function DebtorsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {mockDebtors.map((debtor) => (
+              {filteredDebtors.map((debtor) => (
                 <TableRow key={debtor.id}>
                   <TableCell className="font-medium">{debtor.account}</TableCell>
                   <TableCell>
@@ -184,19 +206,25 @@ function DebtorsPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => alert('Формирование уведомления PDF для ' + debtor.account)}>
+                        <DropdownMenuItem onClick={() => simulateAction('pdf', debtor.account)}>
                           <FileText className="mr-2 h-4 w-4" /> Сформировать уведомление (PDF)
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => simulateAction('email', debtor.account)}>
                           <Mail className="mr-2 h-4 w-4" /> Отправить на Email / в ЛК
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => alert('Настройка автообзвона для ' + debtor.account)}>
+                        <DropdownMenuItem onClick={() => simulateAction('phone', debtor.account)}>
                           <Phone className="mr-2 h-4 w-4" /> Позвонить (автообзвон)
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => alert('Настройка массовой рассылки для ' + debtor.account)}>
+                        <DropdownMenuItem onClick={() => simulateAction('email', debtor.account)}>
                           <Mail className="mr-2 h-4 w-4" /> Отправить Email / SMS
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="text-red-600">
+                        <DropdownMenuItem 
+                          className="text-red-600" 
+                          onClick={() => {
+                            handleStatusChange(debtor.id, 'court');
+                            simulateAction('court', debtor.account);
+                          }}
+                        >
                           <AlertCircle className="mr-2 h-4 w-4" /> Передать в суд
                         </DropdownMenuItem>
                       </DropdownMenuContent>
