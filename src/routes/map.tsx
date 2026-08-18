@@ -119,35 +119,37 @@ function MapPage() {
         )}
       </Card>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm">Центральный р-н</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-red-600">4.8 млн ₽</div>
-            <p className="text-xs text-muted-foreground">12 домов в красной зоне</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm">Северный р-н</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-orange-500">2.1 млн ₽</div>
-            <p className="text-xs text-muted-foreground">5 домов в оранжевой зоне</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm">Западный р-н</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-emerald-600">0.4 млн ₽</div>
-            <p className="text-xs text-muted-foreground">Все дома в норме</p>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {[
+          { name: "Тракторозаводский", debt: "4.8 млн ₽", status: "red" },
+          { name: "Краснооктябрьский", debt: "3.2 млн ₽", status: "red" },
+          { name: "Дзержинский", debt: "2.5 млн ₽", status: "orange" },
+          { name: "Центральный", debt: "1.2 млн ₽", status: "yellow" },
+          { name: "Ворошиловский", debt: "3.5 млн ₽", status: "red" },
+          { name: "Советский", debt: "2.1 млн ₽", status: "orange" },
+          { name: "Кировский", debt: "1.8 млн ₽", status: "yellow" },
+          { name: "Красноармейский", debt: "0.9 млн ₽", status: "green" },
+        ].map((item) => (
+          <Card key={item.name}>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xs font-medium">{item.name}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className={`text-xl font-bold ${
+                item.status === 'red' ? 'text-red-600' : 
+                item.status === 'orange' ? 'text-orange-500' : 
+                item.status === 'yellow' ? 'text-yellow-600' : 'text-emerald-600'
+              }`}>
+                {item.debt}
+              </div>
+              <p className="text-[10px] text-muted-foreground mt-1">
+                {item.status === 'green' ? 'Показатели в норме' : 'Требуется внимание'}
+              </p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
+
     </div>
   );
 }
