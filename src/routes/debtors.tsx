@@ -172,7 +172,7 @@ function DebtorsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {mockDebtors.map((debtor) => (
+              {filteredDebtors.map((debtor) => (
                 <TableRow key={debtor.id}>
                   <TableCell className="font-medium">{debtor.account}</TableCell>
                   <TableCell>
