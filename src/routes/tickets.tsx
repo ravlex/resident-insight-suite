@@ -223,7 +223,48 @@ function TicketsPage() {
         <div className="w-full lg:w-1/3 flex flex-col gap-4 overflow-hidden">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold text-lg">Запросы в ИВЦ</h2>
-            <Button size="sm">Новый запрос</Button>
+            <Dialog open={isNewTicketOpen} onOpenChange={setIsNewTicketOpen}>
+              <DialogTrigger asChild>
+                <Button size="sm">Новый запрос</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Создать новый запрос в ИВЦ</DialogTitle>
+                  <DialogDescription>
+                    Опишите проблему или тему для обсуждения. Менеджер ответит в течение рабочего дня.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="subject">Тема запроса</Label>
+                    <Input 
+                      id="subject" 
+                      placeholder="Например: Сверка по дому Ленина 15" 
+                      value={newSubject}
+                      onChange={(e) => setNewSubject(e.target.value)}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="category">Категория</Label>
+                    <Select value={newCategory} onValueChange={setNewCategory}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите категорию" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Бухгалтерия">Бухгалтерия</SelectItem>
+                        <SelectItem value="Приборы учета">Приборы учета</SelectItem>
+                        <SelectItem value="ИТ">ИТ</SelectItem>
+                        <SelectItem value="Юридический отдел">Юридический отдел</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setIsNewTicketOpen(false)}>Отмена</Button>
+                  <Button onClick={createNewTicket}>Создать запрос</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
           <div className="relative">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
