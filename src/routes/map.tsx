@@ -28,8 +28,9 @@ function MapPage() {
 
       <Card className="w-full aspect-video bg-[#f8fafc] relative overflow-hidden flex items-center justify-center border-none shadow-inner group">
         {/* Mock Map Background */}
-        <div className="absolute inset-0 bg-[#e5e7eb] bg-[url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center transition-transform duration-[40s] hover:scale-110" />
-        <div className="absolute inset-0 bg-white/20 backdrop-brightness-110" />
+        <div className="absolute inset-0 bg-[#e5e7eb] bg-[url('https://static-maps.yandex.ru/v1?ll=44.5170,48.7080&spn=0.1,0.1&size=650,450&scale=2&l=map&theme=light')] bg-cover bg-center transition-transform duration-[40s] hover:scale-105" />
+        <div className="absolute inset-0 bg-white/10" />
+
 
         
         {/* Interactive Heatmap Points */}
