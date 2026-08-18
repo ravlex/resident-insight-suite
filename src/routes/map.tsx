@@ -35,29 +35,46 @@ function MapPage() {
         
         {/* Interactive Heatmap Points */}
         <div className="relative w-full h-full">
-          <div className="absolute top-1/4 left-1/3 group/point cursor-pointer">
+          <div className="absolute top-[20%] left-[20%] group/point cursor-pointer">
             <div className="w-12 h-12 bg-red-500/30 rounded-full animate-ping absolute -inset-3" />
             <div className="w-6 h-6 bg-red-600 rounded-full border-2 border-white shadow-lg relative z-10 transition-transform group-hover/point:scale-125" />
             <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover/point:opacity-100 transition-opacity whitespace-nowrap z-20 shadow-xl">
-              Ленина, 42: 1.2 млн ₽
+              Тракторозаводский: 1.2 млн ₽
             </div>
           </div>
 
-          <div className="absolute top-1/2 left-2/3 group/point cursor-pointer">
+          <div className="absolute top-[30%] left-[40%] group/point cursor-pointer">
             <div className="w-10 h-10 bg-orange-500/30 rounded-full animate-ping absolute -inset-2" />
             <div className="w-5 h-5 bg-orange-500 rounded-full border-2 border-white shadow-lg relative z-10 transition-transform group-hover/point:scale-125" />
             <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover/point:opacity-100 transition-opacity whitespace-nowrap z-20 shadow-xl">
-              Мира, 15: 450к ₽
+              Краснооктябрьский: 850к ₽
             </div>
           </div>
 
-          <div className="absolute top-2/3 left-1/4 group/point cursor-pointer">
+          <div className="absolute top-[45%] left-[50%] group/point cursor-pointer">
             <div className="w-8 h-8 bg-yellow-400/30 rounded-full animate-ping absolute -inset-1" />
             <div className="w-4 h-4 bg-yellow-400 rounded-full border-2 border-white shadow-lg relative z-10 transition-transform group-hover/point:scale-125" />
             <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover/point:opacity-100 transition-opacity whitespace-nowrap z-20 shadow-xl">
-              Гагарина, 8: 120к ₽
+              Центральный: 320к ₽
             </div>
           </div>
+
+          <div className="absolute top-[60%] left-[45%] group/point cursor-pointer">
+            <div className="w-10 h-10 bg-red-500/30 rounded-full animate-ping absolute -inset-2" />
+            <div className="w-5 h-5 bg-red-600 rounded-full border-2 border-white shadow-lg relative z-10 transition-transform group-hover/point:scale-125" />
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover/point:opacity-100 transition-opacity whitespace-nowrap z-20 shadow-xl">
+              Ворошиловский: 1.1 млн ₽
+            </div>
+          </div>
+
+          <div className="absolute top-[70%] left-[40%] group/point cursor-pointer">
+            <div className="w-8 h-8 bg-orange-500/30 rounded-full animate-ping absolute -inset-1" />
+            <div className="w-4 h-4 bg-orange-500 rounded-full border-2 border-white shadow-lg relative z-10 transition-transform group-hover/point:scale-125" />
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover/point:opacity-100 transition-opacity whitespace-nowrap z-20 shadow-xl">
+              Советский: 600к ₽
+            </div>
+          </div>
+
 
           {/* Map Overlay Controls */}
           <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-md p-4 rounded-xl shadow-xl border border-slate-200 z-10">
@@ -102,35 +119,37 @@ function MapPage() {
         )}
       </Card>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm">Центральный р-н</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-red-600">4.8 млн ₽</div>
-            <p className="text-xs text-muted-foreground">12 домов в красной зоне</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm">Северный р-н</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-orange-500">2.1 млн ₽</div>
-            <p className="text-xs text-muted-foreground">5 домов в оранжевой зоне</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm">Западный р-н</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-emerald-600">0.4 млн ₽</div>
-            <p className="text-xs text-muted-foreground">Все дома в норме</p>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {[
+          { name: "Тракторозаводский", debt: "4.8 млн ₽", status: "red" },
+          { name: "Краснооктябрьский", debt: "3.2 млн ₽", status: "red" },
+          { name: "Дзержинский", debt: "2.5 млн ₽", status: "orange" },
+          { name: "Центральный", debt: "1.2 млн ₽", status: "yellow" },
+          { name: "Ворошиловский", debt: "3.5 млн ₽", status: "red" },
+          { name: "Советский", debt: "2.1 млн ₽", status: "orange" },
+          { name: "Кировский", debt: "1.8 млн ₽", status: "yellow" },
+          { name: "Красноармейский", debt: "0.9 млн ₽", status: "green" },
+        ].map((item) => (
+          <Card key={item.name}>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xs font-medium">{item.name}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className={`text-xl font-bold ${
+                item.status === 'red' ? 'text-red-600' : 
+                item.status === 'orange' ? 'text-orange-500' : 
+                item.status === 'yellow' ? 'text-yellow-600' : 'text-emerald-600'
+              }`}>
+                {item.debt}
+              </div>
+              <p className="text-[10px] text-muted-foreground mt-1">
+                {item.status === 'green' ? 'Показатели в норме' : 'Требуется внимание'}
+              </p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
+
     </div>
   );
 }
