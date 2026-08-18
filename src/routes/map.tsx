@@ -28,7 +28,9 @@ function MapPage() {
 
       <Card className="w-full aspect-video bg-[#f8fafc] relative overflow-hidden flex items-center justify-center border-none shadow-inner group">
         {/* Mock Map Background */}
-        <div className="absolute inset-0 opacity-40 bg-[url('https://api.mapbox.com/styles/v1/mapbox/light-v10/static/37.6173,55.7558,11,0/1000x600?access_token=pk.eyJ1IjoiYm90LWxvdmFibGUiLCJhIjoiY202eWJqZzd3MGNiejJtc2J2c3J4ZDJ6eSJ9.dummy')] bg-cover bg-center transition-transform duration-[20s] hover:scale-110" />
+        <div className="absolute inset-0 bg-[#e5e7eb] bg-[url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center transition-transform duration-[40s] hover:scale-110" />
+        <div className="absolute inset-0 bg-white/20 backdrop-brightness-110" />
+
         
         {/* Interactive Heatmap Points */}
         <div className="relative w-full h-full">
