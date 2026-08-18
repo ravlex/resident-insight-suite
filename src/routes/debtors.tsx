@@ -49,6 +49,28 @@ const mockDebtors = [
 
 function DebtorsPage() {
   const [searchTerm, setSearchTerm] = React.useState("");
+  const [debtors, setDebtors] = React.useState(mockDebtors);
+
+  const filteredDebtors = debtors.filter(d => 
+    d.account.includes(searchTerm) || 
+    d.owner.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    d.address.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleStatusChange = (id: string, newStatus: string) => {
+    setDebtors(prev => prev.map(d => d.id === id ? { ...d, status: newStatus } : d));
+  };
+
+  const simulateAction = (action: string, account: string) => {
+    // В реальном приложении здесь был бы вызов API
+    const messages: Record<string, string> = {
+      'pdf': `Уведомление в формате PDF для счета ${account} успешно сформировано и готово к печати.`,
+      'email': `Уведомление для счета ${account} отправлено на электронную почту и в личный кабинет жителя.`,
+      'phone': `Запрос на автоматический обзвон для счета ${account} поставлен в очередь. Система совершит звонок в ближайшее время.`,
+      'court': `Дело по счету ${account} подготовлено для передачи в юридический отдел. Статус изменен на "Судебный приказ".`
+    };
+    alert(messages[action] || 'Действие выполнено');
+  };
 
 
   return (
